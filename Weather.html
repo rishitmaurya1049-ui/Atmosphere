@@ -1,0 +1,1417 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#c4d8e9">
+  <meta name="color-scheme" content="light dark">
+  <title>ATMOSPHERE — feel the day</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none;text-rendering:optimizeLegibility;--ink:#193047;--muted:#60778a;--line:rgba(27,55,75,.15);--accent:#db764c;--paper:#f3f0e9;--skyTop:#b9d2e5;--skyBottom:#efe0c7;--glass:rgba(255,255,255,.32)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:var(--paper);color:var(--ink);overflow-x:hidden;transition:background 1s,color 1s}button,select{font:inherit}button{color:inherit}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.sky{position:absolute;inset:0 0 auto;height:760px;overflow:hidden;pointer-events:none;z-index:-1;background:linear-gradient(160deg,var(--skyTop),var(--skyBottom));transition:background 1.6s ease}.sky:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 58%,#f3f0e9 99%)}.sky-glow{position:absolute;width:70vw;height:70vw;max-width:1000px;max-height:1000px;left:58%;top:-42%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,247,211,.56),rgba(255,236,187,.16) 39%,transparent 68%);filter:blur(6px);transition:all 1.5s}.horizon{position:absolute;left:-10%;right:-10%;bottom:-160px;height:260px;border-radius:50% 50% 0 0;background:linear-gradient(180deg,rgba(203,215,207,.24),rgba(171,193,188,.4));filter:blur(14px)}
+.scene-clear{--skyTop:#acd0e8;--skyBottom:#ead7b9;--accent:#cb7444}.scene-cloudy{--skyTop:#b9cbd6;--skyBottom:#dfd8ca;--accent:#9a7254}.scene-rain{--skyTop:#536b7d;--skyBottom:#a6b3b8;--accent:#b7cddd;--paper:#273846;--ink:#f2f5f3;--muted:#c0ccd0;--line:rgba(235,244,247,.18);color:#f8f6f1}.scene-storm{--skyTop:#2c3748;--skyBottom:#737e87;--accent:#e3c488;--paper:#202a37;--ink:#fff9ec;--muted:#c7c9c8;--line:rgba(255,255,255,.18);color:#fff9ec}.scene-rain .sky:after,.scene-storm .sky:after,.scene-night .sky:after,.scene-fog .sky:after,.scene-snow .sky:after{background:linear-gradient(180deg,rgba(12,31,48,.08),rgba(12,31,48,.2) 54%,var(--paper) 100%)}.scene-fog{--skyTop:#c7d1d0;--skyBottom:#e5e2d8;--accent:#8b9385}.scene-snow{--skyTop:#bad0db;--skyBottom:#ece9de;--accent:#7093a7}.scene-night{--skyTop:#111c35;--skyBottom:#35435c;--accent:#d2b77c;--paper:#20283a;--ink:#f5f1e5;--muted:#c0c5cf;--line:rgba(244,241,231,.18);color:#f5f1e5}.scene-night .sky-glow{width:35vw;height:35vw;left:78%;top:7%;background:radial-gradient(circle,rgba(178,202,226,.18),transparent 68%)}.scene-storm .sky-glow{opacity:.28}.scene-rain .sky-glow,.scene-fog .sky-glow{opacity:.38}.scene-night .sky:after{background:linear-gradient(180deg,rgba(9,17,37,.04),rgba(9,17,37,.17) 58%,var(--paper) 100%)}
+.topbar{height:90px;padding:0 clamp(22px,7vw,110px);display:flex;align-items:center;justify-content:space-between;position:relative;z-index:3}.brand{display:inline-flex;gap:12px;align-items:center;text-decoration:none;color:inherit;font:800 14px Manrope,sans-serif;letter-spacing:.16em}.brand small{display:block;margin-top:4px;font:500 8px 'DM Mono',monospace;letter-spacing:.25em;opacity:.57}.brand-mark{width:25px;height:25px;position:relative;display:inline-flex;align-items:flex-end;gap:3px}.brand-mark span{width:5px;border:1px solid currentColor;border-radius:5px;display:block;transform:rotate(35deg)}.brand-mark span:nth-child(1){height:10px;margin-bottom:2px}.brand-mark span:nth-child(2){height:20px}.brand-mark span:nth-child(3){height:14px;margin-bottom:2px}.topbar-right{display:flex;align-items:center;gap:26px}.live-label,.section-kicker,.eyebrow,.location-kicker,.scroll-hint,.hero-caption,.back-top{font:500 9px 'DM Mono',monospace;letter-spacing:.15em}.live-label{display:flex;align-items:center;gap:9px;opacity:.72}.live-dot{width:6px;height:6px;background:#79a986;border-radius:50%;box-shadow:0 0 0 4px rgba(121,169,134,.15);animation:livePulse 2s ease infinite}.unit-toggle{display:flex;padding:3px;border:1px solid var(--line);background:rgba(255,255,255,.15);border-radius:999px;cursor:pointer}.unit-toggle span{font:500 10px 'DM Mono',monospace;padding:6px 9px;border-radius:99px;opacity:.57}.unit-toggle span.active{background:rgba(255,255,255,.72);opacity:1;box-shadow:0 1px 4px #26384716}
+main{position:relative}.hero{min-height:585px;max-width:1440px;padding:52px clamp(22px,10vw,155px) 76px;margin:auto;position:relative;display:flex;align-items:center}.hero-copy{width:min(640px,65%);position:relative;z-index:2}.eyebrow{display:flex;align-items:center;gap:12px;color:var(--accent);margin-bottom:22px;transition:color 1s}.eyebrow-line{width:25px;height:1px;background:currentColor}.advice{font:500 clamp(32px,4.1vw,56px)/1.13 Manrope,sans-serif;letter-spacing:-.055em;max-width:610px;margin:0 0 16px;transition:color 1s;animation:riseIn .8s both}.best-time{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 46px;transition:color 1s}.scene-rain .best-time,.scene-storm .best-time,.scene-night .best-time{color:rgba(255,255,255,.72)}.best-time strong{font-weight:700;color:var(--ink)}.scene-rain .best-time strong,.scene-storm .best-time strong,.scene-night .best-time strong{color:#fff}.city-heading{display:flex;align-items:center;justify-content:space-between;max-width:440px;margin-bottom:13px}.location-kicker{color:var(--muted);margin:0 0 4px}.city-heading h2{font:600 22px Manrope,sans-serif;letter-spacing:-.04em;margin:0}.local-time{font:11px 'DM Mono',monospace;color:var(--muted);margin:5px 0 0}.location-controls{max-width:440px;display:flex;align-items:center;gap:8px}.location-results[hidden]{display:none}.location-search{position:relative;display:flex;align-items:center;min-width:190px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.3);padding:0 5px 0 12px}.location-search input{width:155px;min-width:0;padding:10px 2px;border:0;background:transparent;color:inherit;font:11px 'DM Mono',monospace;outline:none}.location-search input::placeholder{color:var(--muted);opacity:.8}.location-search>button{border:0;background:transparent;color:inherit;font-size:19px;cursor:pointer;padding:2px 7px}.location-results{position:absolute;z-index:10;top:calc(100% + 7px);right:0;width:min(290px,80vw);max-height:260px;overflow:auto;padding:5px;border:1px solid var(--line);border-radius:12px;background:var(--paper);box-shadow:0 12px 30px rgba(20,40,60,.18)}.location-result{display:block;width:100%;padding:10px;border:0;border-radius:8px;background:transparent;color:var(--ink);text-align:left;font:11px 'DM Sans',sans-serif;cursor:pointer}.location-result:hover,.location-result:focus{background:rgba(120,150,170,.15);outline:none}.location-search:focus-within,.location-button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.scene-rain .location-search,.scene-storm .location-search,.scene-night .location-search{background:rgba(255,255,255,.08)}.location-button{display:inline-flex;align-items:center;gap:6px;padding:9px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.3);color:inherit;font:500 10px 'DM Mono',monospace;cursor:pointer;white-space:nowrap}.location-button:hover{background:rgba(255,255,255,.55)}.location-button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.unit-toggle:focus-visible,.detail-card:focus-visible,.hourly-rail:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.current-weather{display:flex;align-items:center;gap:18px}.temperature{font:500 clamp(70px,9vw,110px)/.95 Manrope,sans-serif;letter-spacing:-.1em}.temperature span{font-size:.48em;vertical-align:top;line-height:1.4;letter-spacing:-.04em}.condition-block{padding-left:18px;border-left:1px solid var(--line)}.condition-name{display:block;border:0;background:none;padding:0;text-align:left;font:600 17px Manrope,sans-serif;letter-spacing:-.03em;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(25,48,71,.25);text-underline-offset:5px}.scene-rain .condition-name,.scene-storm .condition-name,.scene-night .condition-name{text-decoration-color:rgba(255,255,255,.4)}.feels-like{font:11px 'DM Mono',monospace;color:var(--muted);margin:8px 0 0}.today-range{font:10px 'DM Mono',monospace;color:var(--muted);margin:17px 0 0}.sun-path{display:flex;align-items:center;gap:9px;font:10px 'DM Mono',monospace;color:var(--muted);margin-top:10px}.sun-path svg{width:15px;height:15px;opacity:.75}.sun-path .sun-divider{width:1px;height:13px;background:var(--line);margin:0 4px}.hero-art{position:absolute;width:min(43vw,570px);height:430px;right:7%;top:67px;display:grid;place-items:center;z-index:1;animation:float 7s ease-in-out infinite}.orbit{position:absolute;border:1px solid rgba(255,255,255,.3);border-radius:50%;width:76%;height:86%;transform:rotate(-22deg)}.orbit-two{width:93%;height:68%;transform:rotate(31deg);border-color:rgba(255,255,255,.2)}.celestial{position:absolute;width:180px;height:180px;border-radius:50%;left:47%;top:22%;transform:translateX(-50%);z-index:0;transition:all 1.4s ease;background:radial-gradient(circle at 40% 34%,#fff6d6 0 8%,#f8d899 42%,#edb778 75%,#df9f70 100%);box-shadow:0 0 44px #ffe5ae91,0 0 110px #ffdda15e}.scene-cloudy .celestial{opacity:.72;filter:saturate(.7);box-shadow:0 0 60px #f8e9c566}.scene-rain .celestial,.scene-fog .celestial{opacity:.48;filter:saturate(.35);box-shadow:0 0 45px #dce9e73d}.scene-storm .celestial{opacity:.17}.scene-snow .celestial{background:radial-gradient(circle at 40% 34%,#fff 0 8%,#e1eef2 48%,#bad2dc 100%);box-shadow:0 0 70px #e8f8ff91}.scene-night .celestial{width:150px;height:150px;left:47%;top:18%;background:radial-gradient(circle at 37% 31%,#f8f1d6,#ded8ba 65%,#b7b3a5);box-shadow:0 0 70px #dce4f043}.scene-night .celestial:after{content:"";position:absolute;width:146px;height:146px;left:35px;top:-13px;border-radius:50%;background:var(--skyTop);transition:background 1s}.scene-rain .sky{background-image:linear-gradient(160deg,var(--skyTop),var(--skyBottom))}.scene-fog .celestial{opacity:.32}.cloud{position:absolute;z-index:2;filter:drop-shadow(0 12px 16px rgba(53,77,92,.09));animation:cloudDrift 29s linear infinite}.cloud i,.hero-cloud span{position:absolute;display:block;border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,.83),rgba(237,239,231,.68))}.cloud i:nth-child(1){width:94px;height:59px;left:8px;top:18px}.cloud i:nth-child(2){width:75px;height:75px;left:50px;top:0}.cloud i:nth-child(3){width:90px;height:54px;left:96px;top:22px}.cloud-one{width:190px;height:90px;top:27%;left:13%}.cloud-two{transform:scale(.65);top:63%;right:7%;animation-delay:-11s;opacity:.64}.cloud-three{transform:scale(.42);top:13%;right:15%;animation-delay:-19s;opacity:.58}.scene-clear .cloud-one{opacity:.55}.scene-clear .cloud-two{opacity:.42}.scene-cloudy .cloud{opacity:.93;filter:drop-shadow(0 14px 18px rgba(64,82,92,.16))}.scene-rain .cloud,.scene-storm .cloud{opacity:.96}.scene-night .cloud i{background:linear-gradient(145deg,rgba(119,139,161,.6),rgba(78,97,121,.45))}.scene-fog .cloud{opacity:.45;filter:blur(2px)}.hero-cloud{position:absolute;z-index:3;filter:drop-shadow(0 13px 15px rgba(52,75,88,.12));transition:all 1.2s}.hero-cloud span{background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(229,235,229,.78))}.hero-cloud span:nth-child(1){width:140px;height:83px;left:0;top:50px}.hero-cloud span:nth-child(2){width:120px;height:120px;left:70px;top:0}.hero-cloud span:nth-child(3){width:145px;height:88px;left:137px;top:46px}.hero-cloud-front{left:42%;top:43%;transform:scale(.9)}.hero-cloud-back{left:23%;top:54%;transform:scale(.52);opacity:.58}.scene-clear .hero-cloud{opacity:.3}.scene-clear .hero-cloud-front{transform:translate(15px,-12px) scale(.72)}.scene-rain .hero-cloud span,.scene-storm .hero-cloud span{background:linear-gradient(145deg,#d7e1e1,#8599a4)}.scene-rain .hero-cloud-front,.scene-storm .hero-cloud-front{transform:scale(1.08)}.scene-night .hero-cloud span{background:linear-gradient(145deg,#9baec0,#657991)}.weather-streak{position:absolute;width:80px;height:1px;background:rgba(255,255,255,.55);transform:rotate(-34deg);opacity:0;z-index:4}.streak-one{left:32%;top:65%}.streak-two{left:41%;top:72%;width:48px}.scene-rain .weather-streak,.scene-storm .weather-streak{opacity:.8;animation:streakFall 1.1s linear infinite}.scene-rain .streak-two,.scene-storm .streak-two{animation-delay:-.55s}.scene-fog .hero-art{filter:blur(1px);opacity:.8}.hero-glints{position:absolute;inset:15% 10%;z-index:3}.hero-glints i{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff5cc;box-shadow:0 0 12px 4px #fff4c861;animation:twinkle 3s ease-in-out infinite}.hero-glints i:nth-child(1){left:15%;top:42%}.hero-glints i:nth-child(2){left:75%;top:24%;animation-delay:-1s}.hero-glints i:nth-child(3){left:71%;top:73%;animation-delay:-2s}.hero-glints i:nth-child(4){left:25%;top:77%;animation-delay:-.7s}.hero-glints i:nth-child(5){left:57%;top:14%;animation-delay:-1.5s}.scene-clear .hero-glints{opacity:.1}.scene-cloudy .hero-glints{opacity:.4}.scene-rain .hero-glints,.scene-fog .hero-glints,.scene-storm .hero-glints{opacity:0}.scene-night .hero-glints{opacity:1}.rain-layer,.snow-layer,.fog-layer,.lightning{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity .8s;pointer-events:none}.rain-layer{background-image:repeating-linear-gradient(105deg,transparent 0 55px,rgba(238,248,255,.2) 56px,transparent 58px);background-size:90px 180px;animation:rain 1s linear infinite}.scene-rain .rain-layer,.scene-storm .rain-layer{opacity:.48}.scene-storm .rain-layer{opacity:.74}.snow-layer{background-image:radial-gradient(3px 3px at 8% 10%,#fff 70%,transparent),radial-gradient(2px 2px at 34% 28%,#fff 70%,transparent),radial-gradient(4px 4px at 74% 8%,#fff 70%,transparent),radial-gradient(3px 3px at 90% 50%,#fff 70%,transparent);background-size:220px 220px,180px 180px,270px 270px,190px 190px;animation:snow 13s linear infinite}.scene-snow .snow-layer{opacity:.72}.fog-layer{background:linear-gradient(180deg,transparent 20%,rgba(245,246,237,.42) 45%,rgba(244,244,234,.56) 58%,transparent 75%);filter:blur(15px);animation:fogDrift 18s ease-in-out infinite alternate}.scene-fog .fog-layer{opacity:1}.lightning{background:#f8faf8;mix-blend-mode:screen}.scene-storm .lightning{animation:flash 8s linear infinite}
+.hero-caption{position:absolute;right:clamp(22px,7vw,110px);bottom:32px;display:flex;align-items:center;gap:10px;font-size:8px;opacity:.65}.caption-dot{width:5px;height:5px;background:var(--accent);border-radius:50%}.caption-rule{width:28px;height:1px;background:currentColor;opacity:.4}
+.details-section,.hourly-section{max-width:1180px;margin:0 auto;padding:55px clamp(22px,5vw,64px) 62px;position:relative}.details-section:before,.hourly-section:before{content:"";position:absolute;top:0;left:clamp(22px,5vw,64px);right:clamp(22px,5vw,64px);height:1px;background:var(--line)}.section-heading{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:27px}.section-kicker{color:var(--accent);margin:0 0 9px}.section-heading h2{font:600 24px Manrope,sans-serif;letter-spacing:-.045em;margin:0}.section-aside{font-size:11px;color:var(--muted);margin:0 0 3px}.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.detail-card{border:0;border-right:1px solid var(--line);background:transparent;min-height:140px;padding:22px 21px 18px;text-align:left;cursor:pointer;position:relative;transition:background .25s,transform .25s}.detail-card:last-child{border-right:0}.detail-card:hover{background:rgba(255,255,255,.34);transform:translateY(-3px)}.detail-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.detail-icon{width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;font-size:14px;color:var(--accent)}.info-mark{font:500 10px 'DM Mono',monospace;color:var(--muted);border:1px solid var(--line);border-radius:50%;width:17px;height:17px;display:grid;place-items:center}.detail-label{font:500 9px 'DM Mono',monospace;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}.detail-value{display:block;font:600 24px Manrope,sans-serif;letter-spacing:-.04em;margin-top:5px}.detail-value small{font:500 11px 'DM Sans',sans-serif;letter-spacing:0;color:var(--muted)}.detail-note{display:block;font-size:10px;color:var(--muted);margin-top:5px}.hourly-section{padding-top:54px;padding-bottom:45px}.hourly-heading{margin-bottom:23px}.scroll-hint{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:8px}.scroll-hint span+span{font-size:18px;color:var(--accent)}.hourly-shell{position:relative}.hourly-shell:before,.hourly-shell:after{content:"";position:absolute;z-index:2;top:0;bottom:5px;width:32px;pointer-events:none}.hourly-shell:before{left:0;background:linear-gradient(90deg,var(--paper),transparent)}.hourly-shell:after{right:0;background:linear-gradient(270deg,var(--paper),transparent)}.hourly-rail{display:flex;overflow-x:auto;scrollbar-width:thin;scrollbar-color:rgba(37,66,84,.28) transparent;gap:0;padding:4px 8px 15px;scroll-snap-type:x mandatory}.hour-card{flex:0 0 112px;min-height:165px;text-align:center;scroll-snap-align:start;padding:16px 10px 11px;border-right:1px solid var(--line);position:relative}.hour-card:first-child{border-left:1px solid var(--line)}.hour-card.now:before{content:"NOW";position:absolute;top:0;left:50%;transform:translate(-50%,-50%);font:500 8px 'DM Mono',monospace;letter-spacing:.1em;color:var(--accent);background:var(--paper);padding:0 7px}.hour-time{font:10px 'DM Mono',monospace;color:var(--muted)}.hour-icon{display:block;font-size:23px;margin:15px auto 10px;height:28px;filter:drop-shadow(0 3px 4px #2134461b)}.hour-temp{font:600 20px Manrope,sans-serif;letter-spacing:-.05em}.hour-rain{font:9px 'DM Mono',monospace;color:#678aa0;margin-top:7px}.hourly-note{font-size:10px;color:var(--muted);margin:14px 0 0}.footer{border-top:1px solid var(--line);min-height:93px;max-width:1180px;padding:19px clamp(22px,5vw,64px);margin:auto;display:flex;align-items:center;justify-content:space-between}.footer-brand{font-size:11px}.footer-brand .brand-mark{transform:scale(.8);transform-origin:left center}.footer p{font-size:10px;color:var(--muted)}.footer p a{color:inherit;text-underline-offset:3px}.back-top{color:var(--muted);text-decoration:none;font-size:8px}.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,15px);z-index:10;padding:12px 18px;border:1px solid #ffffff4a;border-radius:999px;background:rgba(27,47,64,.88);color:#fff;font-size:12px;box-shadow:0 10px 35px #132a3c2b;opacity:0;pointer-events:none;transition:.25s;max-width:min(90vw,480px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.loading-skeleton{opacity:.5}.error-message{color:#8b5144!important}
+@keyframes cloudDrift{0%,100%{translate:0 0}50%{translate:17px -5px}}@keyframes float{0%,100%{translate:0 0}50%{translate:0 -10px}}@keyframes rain{to{background-position:90px 180px}}@keyframes snow{to{background-position:60px 220px,-90px 180px,70px 270px,-30px 190px}}@keyframes fogDrift{from{transform:translateX(-6%)}to{transform:translateX(6%)}}@keyframes streakFall{0%{translate:12px -12px;opacity:0}15%{opacity:.8}100%{translate:-32px 35px;opacity:0}}@keyframes twinkle{0%,100%{opacity:.35;transform:scale(.7)}50%{opacity:1;transform:scale(1.3)}}@keyframes livePulse{0%,100%{box-shadow:0 0 0 3px rgba(121,169,134,.12)}50%{box-shadow:0 0 0 6px rgba(121,169,134,.04)}}@keyframes riseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes flash{0%,92%,94%,100%{opacity:0}92.3%,92.8%{opacity:.85}93.2%{opacity:.08}93.5%{opacity:.7}}
+@media(max-width:850px){.hero{min-height:630px;padding-top:34px;align-items:flex-start}.hero-copy{width:74%}.hero-art{width:46vw;right:1%;top:166px;opacity:.75}.celestial{width:135px;height:135px}.hero-caption{bottom:22px}.detail-grid{grid-template-columns:repeat(2,1fr)}.detail-card:nth-child(2){border-right:0}.detail-card:nth-child(-n+2){border-bottom:1px solid var(--line)}.scene-night .celestial{width:120px;height:120px}.scene-night .celestial:after{width:116px;height:116px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Keep wet and night scenes dark all the way through the content, with readable type. */
+.scene-rain,.scene-storm,.scene-night{background:var(--paper);color:var(--ink)}
+.scene-rain .sky:after,.scene-storm .sky:after,.scene-night .sky:after{background:linear-gradient(180deg,rgba(12,24,40,.18),rgba(12,24,40,.48) 57%,var(--paper) 100%)}
+.scene-rain .location-kicker,.scene-rain .local-time,.scene-rain .feels-like,.scene-rain .today-range,.scene-rain .sun-path,.scene-rain .section-aside,.scene-rain .detail-label,.scene-rain .detail-note,.scene-rain .info-mark,.scene-rain .hour-time,.scene-rain .hourly-note,.scene-rain .footer p,.scene-storm .location-kicker,.scene-storm .local-time,.scene-storm .feels-like,.scene-storm .today-range,.scene-storm .sun-path,.scene-storm .section-aside,.scene-storm .detail-label,.scene-storm .detail-note,.scene-storm .info-mark,.scene-storm .hour-time,.scene-storm .hourly-note,.scene-storm .footer p,.scene-night .location-kicker,.scene-night .local-time,.scene-night .feels-like,.scene-night .today-range,.scene-night .sun-path,.scene-night .section-aside,.scene-night .detail-label,.scene-night .detail-note,.scene-night .info-mark,.scene-night .hour-time,.scene-night .hourly-note,.scene-night .footer p{color:var(--muted)}
+.scene-rain .hour-rain,.scene-storm .hour-rain,.scene-night .hour-rain{color:#b9d8e8}
+.scene-rain .unit-toggle span.active,.scene-storm .unit-toggle span.active,.scene-night .unit-toggle span.active{background:rgba(255,255,255,.18)}
+.scene-rain .hour-card.now:before,.scene-storm .hour-card.now:before,.scene-night .hour-card.now:before{background:var(--paper)}
+
+/* Phone layout: keep controls, location and the forecast readable without horizontal overflow. */
+@media(max-width:600px){
+  html,body{min-width:320px;overflow-x:hidden}
+  .topbar{height:auto;min-height:76px;padding:14px 18px;gap:12px;align-items:flex-start}
+  .brand{gap:8px;font-size:12px;letter-spacing:.12em;flex-shrink:0}
+  .brand small{font-size:7px}
+  .brand-mark{transform:scale(.88);transform-origin:left center;width:23px}
+  .topbar-right{gap:9px;flex-direction:column;align-items:flex-end}
+  .live-label{font-size:7px;letter-spacing:.08em;gap:6px;max-width:48vw;text-align:right}
+  .header-controls{gap:6px}
+  .sound-toggle{padding:6px 8px}
+  .unit-toggle span{padding:5px 7px}
+  .hero{min-height:0;padding:36px 20px 72px;display:block}
+  .hero-copy{width:100%;max-width:100%}
+  .eyebrow{font-size:8px;margin-bottom:14px}
+  .advice{font-size:clamp(30px,9vw,42px);max-width:100%;margin-bottom:10px}
+  .best-time{font-size:13px;margin-bottom:26px;max-width:36ch}
+  .city-heading{display:block;max-width:none;margin-bottom:22px}
+  .city-heading h2{font-size:20px;overflow-wrap:anywhere}
+  .location-controls{width:100%;max-width:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;margin-top:14px}
+  .location-button{justify-content:center;padding:10px 12px;min-height:40px}
+  .location-search{min-width:0;width:100%;height:40px}
+  .location-search input{width:100%;font-size:12px}
+  .location-results{width:min(340px,calc(100vw - 40px));right:0}
+  .current-weather{gap:12px;align-items:center}
+  .temperature{font-size:clamp(68px,21vw,92px)}
+  .condition-block{padding-left:12px;min-width:0}
+  .condition-name{font-size:15px}
+  .feels-like{font-size:10px}
+  .today-range{font-size:9px;line-height:1.6;margin-top:13px}
+  .sun-path{gap:7px;flex-wrap:wrap;font-size:9px}
+  .hero-art{width:150px;height:160px;right:8px;top:270px;opacity:.36;pointer-events:none}
+  .hero-art .orbit{width:85%;height:76%}
+  .hero-art .celestial{width:84px;height:84px;left:52%;top:10%}
+  .scene-night .hero-art .celestial{width:74px;height:74px;left:52%;top:13%}
+  .hero-art .hero-cloud-front{transform:scale(.42);left:14%;top:45%}
+  .hero-art .hero-cloud-back{transform:scale(.3);left:0;top:53%}
+  .hero-caption{left:20px;right:20px;bottom:20px;font-size:7px;gap:7px}
+  .details-section,.hourly-section,.weekly-section{padding:36px 20px 42px}
+  .section-heading{gap:12px;align-items:flex-start;margin-bottom:20px}
+  .section-heading h2{font-size:20px}
+  .section-kicker{font-size:8px;line-height:1.5}
+  .section-aside{font-size:10px;max-width:36%;text-align:right;line-height:1.45}
+  .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .detail-card{min-height:122px;padding:16px 13px}
+  .detail-card:nth-child(2n){border-right:0}
+  .detail-card:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .detail-value{font-size:21px}
+  .hourly-section .section-heading{align-items:center}
+  .scroll-hint{font-size:7px;white-space:nowrap;gap:5px}
+  .hour-card{flex-basis:94px;min-height:145px;padding:14px 7px 9px}
+  .hour-temp{font-size:18px}
+  .week-day{padding:12px 9px;min-height:126px}
+  .week-condition{font-size:9px}
+  .week-date strong{font-size:10px}
+  .week-temps strong,.week-temps span{font-size:14px}
+  .footer{padding:18px 20px;gap:14px;flex-wrap:wrap}
+  .footer p{font-size:9px;line-height:1.5;order:3;width:100%;margin:0}
+  .back-top{margin-left:auto}
+}
+@media(max-width:380px){
+  .topbar{padding-inline:14px}
+  .live-label{max-width:45vw}
+  .hero{padding-inline:16px}
+  .location-controls{grid-template-columns:1fr}
+  .location-button{justify-self:start}
+  .hero-art{top:305px;right:0}
+  .details-section,.hourly-section,.weekly-section{padding-inline:16px}
+  .section-aside{max-width:34%;font-size:9px}
+  .week-day{padding-inline:6px}
+}
+
+
+.header-controls{display:flex;align-items:center;gap:13px}.sound-toggle{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.18);color:inherit;padding:8px 11px;cursor:pointer;font:500 8px 'DM Mono',monospace;letter-spacing:.1em;transition:background .2s,border-color .2s}.sound-toggle:hover,.sound-toggle[aria-pressed="true"]{background:rgba(255,255,255,.35)}.sound-icon{font:16px 'DM Sans',sans-serif}.scene-rain .sound-toggle,.scene-storm .sound-toggle,.scene-night .sound-toggle{background:rgba(255,255,255,.08)}.sound-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:3}@media(max-width:560px){.location-controls{width:100%;justify-content:space-between}.location-search{min-width:0;flex:1}.location-search input{width:100%}.header-controls{gap:8px}.sound-toggle{padding:8px}.sound-label{display:none}}
+/* Cloud definition: brighter crowns, shaded undersides and a soft rim make each cloud readable against the sky. */
+.cloud i,.hero-cloud span{background:linear-gradient(155deg,#fff 4%,#f8fbfc 34%,#d8e2e7 75%,#b8c8d1 100%);box-shadow:inset 0 2px 5px rgba(255,255,255,.96),inset 0 -7px 12px rgba(100,124,139,.24),0 4px 10px rgba(47,70,85,.12);}
+.scene-rain .cloud i,.scene-rain .hero-cloud span,.scene-storm .cloud i,.scene-storm .hero-cloud span{background:linear-gradient(155deg,#eef4f5 2%,#cbd7dc 36%,#8396a2 82%,#657a88 100%);box-shadow:inset 0 2px 4px rgba(255,255,255,.8),inset 0 -8px 13px rgba(25,42,55,.3),0 5px 12px rgba(17,31,45,.22);}
+.scene-night .cloud i,.scene-night .hero-cloud span{background:linear-gradient(155deg,#d4dfeb 0%,#9aadc0 40%,#63768b 84%,#495c71 100%);box-shadow:inset 0 2px 5px rgba(255,255,255,.75),inset 0 -8px 14px rgba(22,32,49,.32),0 5px 12px rgba(8,15,32,.3);}
+/* Let the sun and moon lead the sky. */
+.hero-art .celestial{width:242px;height:242px;left:51%;top:8%;z-index:2;box-shadow:0 0 54px 13px rgba(255,235,174,.72),0 0 135px 48px rgba(255,217,137,.38),inset -13px -14px 24px rgba(204,125,61,.22);animation:celestialDrift 8s ease-in-out infinite,celestialReveal 1.25s cubic-bezier(.2,.75,.25,1) both;will-change:transform,filter;}
+.scene-cloudy .hero-art .celestial{opacity:.88;filter:saturate(.9);}
+.scene-rain .hero-art .celestial{opacity:.76;filter:saturate(.65);}
+.scene-fog .hero-art .celestial{opacity:.67;filter:saturate(.65);}
+.scene-storm .hero-art .celestial{opacity:.48;filter:saturate(.7);}
+.scene-snow .hero-art .celestial{box-shadow:0 0 58px 12px rgba(239,250,255,.86),0 0 145px 52px rgba(208,236,249,.5),inset -12px -12px 23px rgba(84,133,157,.2);}
+.scene-night .hero-art .celestial{width:205px;height:205px;left:51%;top:10%;z-index:2;background:radial-gradient(circle at 38% 32%,#fffbe8 0%,#f3efda 48%,#d8d9d0 78%,#bfc8ce 100%);box-shadow:0 0 45px 9px rgba(226,238,255,.58),0 0 130px 38px rgba(167,194,226,.3),inset -15px -14px 22px rgba(68,83,111,.22);}
+.scene-night .hero-art .celestial:after{width:196px;height:196px;left:52px;top:-22px;background:var(--skyTop);opacity:.92;}
+.scene-night .hero-art .celestial{animation:moonDrift 10s ease-in-out infinite,celestialReveal 1.25s cubic-bezier(.2,.75,.25,1) both;}
+.scene-night .hero-art .hero-cloud{top:55%;}
+.hero-art .hero-cloud-front{top:55%;}
+.hero-art .hero-cloud-back{top:65%;}
+@media(max-width:850px){.hero-art .celestial{width:195px;height:195px;top:13%;}.scene-night .hero-art .celestial{width:170px;height:170px;top:14%;}.scene-night .hero-art .celestial:after{width:162px;height:162px;left:44px;top:-18px;}}
+@media(max-width:560px){.location-controls{width:100%;justify-content:space-between}.location-search{min-width:0;flex:1}.location-search input{width:100%}.hero-art .celestial{width:165px;height:165px;left:55%;top:1%;}.scene-night .hero-art .celestial{width:145px;height:145px;left:55%;top:2%;}.scene-night .hero-art .celestial:after{width:138px;height:138px;left:38px;top:-15px;}.hero-art .hero-cloud-front{top:43%;}.hero-art .hero-cloud-back{top:53%;}}
+@keyframes celestialDrift{0%,100%{translate:0 0;filter:brightness(1)}50%{translate:0 -12px;filter:brightness(1.08)}}
+@keyframes moonDrift{0%,100%{translate:0 0;filter:brightness(1)}50%{translate:0 -9px;filter:brightness(1.12)}}
+@keyframes celestialReveal{from{opacity:0;scale:.72;rotate:-9deg}to{opacity:1;scale:1;rotate:0deg}}
+@media(prefers-reduced-motion:reduce){.hero-art .celestial,.scene-night .hero-art .celestial{animation:none;}}
+
+/* ===== Motion upgrade ===== */
+/* Fix: sky sat behind the body background and was never visible */
+.sky{z-index:0}
+/* Smooth sky/theme colour changes between weather scenes */
+@property --skyTop{syntax:'<color>';inherits:true;initial-value:#b9d2e5}
+@property --skyBottom{syntax:'<color>';inherits:true;initial-value:#efe0c7}
+@property --paper{syntax:'<color>';inherits:true;initial-value:#f3f0e9}
+@property --ink{syntax:'<color>';inherits:true;initial-value:#193047}
+@property --muted{syntax:'<color>';inherits:true;initial-value:#60778a}
+@property --accent{syntax:'<color>';inherits:true;initial-value:#db764c}
+body{transition:--skyTop 1.8s ease,--skyBottom 1.8s ease,--paper 1.2s,--ink 1.2s,--muted 1.2s,--accent 1.2s,background 1.2s,color 1.2s}
+@keyframes rise{from{opacity:0;translate:0 22px}to{opacity:1;translate:0 0}}
+@keyframes spin{to{rotate:360deg}}
+@keyframes breathe{50%{opacity:.35}}
+.rv{animation:rise .85s cubic-bezier(.2,.7,.2,1) both}.rv-wait{opacity:0}
+.topbar{animation:rise .8s .05s both}
+.scene-loading .advice,.scene-loading .temperature{animation:breathe 1.4s ease-in-out infinite}
+/* Sun & moon: bigger, glowing, with slowly turning rays */
+.hero-art .celestial{animation:celestialReveal 1.2s cubic-bezier(.2,.75,.25,1) both,sunFloat 8s ease-in-out 1.2s infinite}
+@keyframes sunFloat{0%,100%{translate:0 0}50%{translate:0 -14px}}
+.hero-art .celestial:before{content:"";position:absolute;inset:-46%;border-radius:50%;pointer-events:none;background:repeating-conic-gradient(rgba(255,236,170,.36) 0 4deg,transparent 4deg 15deg);-webkit-mask:radial-gradient(circle,transparent 34%,#000 36%,transparent 70%);mask:radial-gradient(circle,transparent 34%,#000 36%,transparent 70%);animation:spin 70s linear infinite;transition:opacity 1s}
+.scene-cloudy .hero-art .celestial:before{opacity:.45}
+.scene-night .hero-art .celestial:before,.scene-storm .hero-art .celestial:before,.scene-rain .hero-art .celestial:before,.scene-fog .hero-art .celestial:before{opacity:0}
+.scene-night .hero-art .celestial{animation:celestialReveal 1.2s cubic-bezier(.2,.75,.25,1) both,sunFloat 10s ease-in-out 1.2s infinite;background:radial-gradient(circle at 62% 38%,rgba(140,152,165,.38) 0 9%,transparent 10%),radial-gradient(circle at 36% 64%,rgba(140,152,165,.32) 0 13%,transparent 14%),radial-gradient(circle at 70% 72%,rgba(140,152,165,.3) 0 6%,transparent 7%),radial-gradient(circle at 36% 30%,#fffbe8 0,#f3efda 50%,#d4d6cf 80%,#b9c3cb 100%)}
+.scene-night .hero-art .celestial:after{display:none}
+/* Clouds that really drift */
+.cloud{animation:cloudDrift 40s ease-in-out infinite alternate}.cloud-two{animation-duration:54s}.cloud-three{animation-duration:46s}
+@keyframes cloudDrift{from{translate:-5vw 0}to{translate:8vw -8px}}
+.hero-cloud-front{animation:heroCloud 14s ease-in-out infinite}.hero-cloud-back{animation:heroCloud 18s ease-in-out -7s infinite reverse}
+@keyframes heroCloud{0%,100%{translate:-16px 0}50%{translate:20px -7px}}
+/* Rain */
+.rain-layer{background:none;animation:none;overflow:hidden}.scene-rain .rain-layer,.scene-storm .rain-layer{opacity:1}
+.rain-layer i{position:absolute;top:-110px;left:var(--x);width:1.6px;height:var(--h);border-radius:2px;background:linear-gradient(transparent,rgba(214,234,248,.8));opacity:var(--o);transform:rotate(12deg);animation:drop var(--d) linear var(--dl) infinite;animation-play-state:paused}
+.scene-rain .rain-layer i,.scene-storm .rain-layer i{animation-play-state:running}.scene-storm .rain-layer i{width:2.2px}
+@keyframes drop{to{translate:-180px 860px}}
+.weather-streak{display:none}
+.hero-drops{position:absolute;left:34%;width:44%;top:66%;height:140px;z-index:2;display:none;pointer-events:none}
+.scene-rain .hero-drops,.scene-storm .hero-drops{display:block}
+.hero-drops i{position:absolute;top:0;left:var(--x);width:1.6px;height:20px;background:linear-gradient(transparent,rgba(225,240,250,.95));transform:rotate(12deg);animation:hdrop var(--d) linear var(--dl) infinite}
+@keyframes hdrop{0%{translate:0 0;opacity:0}15%{opacity:1}100%{translate:-24px 130px;opacity:0}}
+/* Snow */
+.snow-layer{background:none;animation:none;overflow:hidden}.scene-snow .snow-layer{opacity:1}
+.snow-layer i{position:absolute;top:-14px;left:var(--x);width:var(--s);height:var(--s);border-radius:50%;background:#fff;opacity:var(--o);filter:blur(var(--b));animation:flake var(--d) linear var(--dl) infinite,sway var(--sw) ease-in-out var(--dl) infinite alternate;animation-play-state:paused}
+.scene-snow .snow-layer i{animation-play-state:running}
+@keyframes flake{to{translate:0 800px}}@keyframes sway{from{transform:translateX(-22px)}to{transform:translateX(22px)}}
+/* Fog */
+.fog-layer{inset:0 -12%}.fog-layer:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(245,246,237,.5) 62%,transparent 85%);animation:fogDrift 28s ease-in-out infinite alternate-reverse}
+/* Night: twinkling stars + shooting star */
+.star-layer{position:absolute;inset:0;z-index:1;opacity:0;transition:opacity 1.6s;pointer-events:none}.scene-night .star-layer{opacity:1}
+.star-layer i{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;background:#fff;box-shadow:0 0 6px 1px rgba(255,255,255,.7);animation:twinkle var(--d) ease-in-out var(--dl) infinite;animation-play-state:paused}
+.scene-night .star-layer i{animation-play-state:running}
+.shoot{position:absolute;left:66%;top:9%;width:130px;height:1.6px;background:linear-gradient(270deg,transparent,#fff);transform:rotate(-28deg);opacity:0}
+.scene-night .shoot{animation:shoot 9s linear 2s infinite}
+@keyframes shoot{0%{translate:0 0;opacity:0}2%{opacity:1}9%,100%{translate:-340px 180px;opacity:0}}
+/* Storm: visible bolt, first flash arrives within seconds */
+.bolt{position:absolute;left:52%;top:63%;width:46px;height:92px;opacity:0;z-index:4;filter:drop-shadow(0 0 10px #fff2a8) drop-shadow(0 0 26px rgba(255,236,150,.7))}
+.scene-storm .bolt{animation:bolt 8s linear -4s infinite}.scene-storm .lightning{animation-delay:-4s}
+@keyframes bolt{0%,92%,94%,100%{opacity:0}92.3%,92.8%{opacity:1}93.2%{opacity:.15}93.5%{opacity:.9}}
+/* Hover polish */
+.detail-icon{transition:transform .35s,background .35s}.detail-card:hover .detail-icon{transform:rotate(-8deg) scale(1.12);background:rgba(255,255,255,.4)}
+.hour-card{transition:background .25s,transform .25s}.hour-card:hover{background:rgba(255,255,255,.22);transform:translateY(-4px)}
+@media(prefers-reduced-motion:reduce){.rain-layer i,.snow-layer i,.hero-drops,.star-layer,.shoot,.bolt{display:none}.rv-wait{opacity:1}}
+
+/* ===== Search bar + location layout fixes ===== */
+/* The reveal animations give each hero row its own stacking context, so the dropdown was trapped
+   under the rows below it. Lifting the whole heading row above them fixes the overlap. */
+.city-heading{position:relative;z-index:30}
+.location-results{z-index:40;background:var(--paper);background-clip:padding-box;box-shadow:0 18px 40px rgba(10,25,40,.28),0 0 0 1px var(--line);-webkit-backdrop-filter:none;backdrop-filter:none;isolation:isolate}
+.location-result{background:var(--paper)}
+.location-result:hover,.location-result:focus{background:color-mix(in srgb,var(--paper) 82%,var(--accent))}
+.city-heading{display:block;max-width:520px}
+.city-heading h2{overflow-wrap:anywhere}
+.location-controls{max-width:none;margin-top:14px}
+.location-search{flex:1;min-width:0;transition:border-color .2s,background .2s}
+.location-search:focus-within{border-color:var(--accent);background:rgba(255,255,255,.5)}
+.location-search input{flex:1;width:auto;font-size:12px}
+.location-search>button[type=submit]{border:0;background:transparent;color:inherit;font-size:19px;padding:6px 9px;cursor:pointer}
+.location-button:disabled{opacity:.7;cursor:progress}
+.location-results{left:0;right:auto;width:100%;max-width:340px}
+.location-result{display:flex;flex-direction:column;gap:2px}
+.loc-name{font:600 12px Manrope,sans-serif}.loc-sub{font-size:10px;color:var(--muted)}
+.location-note{padding:10px;font-size:11px;color:var(--muted)}
+@media(max-width:560px){.location-controls{flex-wrap:wrap}.location-results{max-width:none}}
+/* Opening logo animation */
+.intro-screen{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:linear-gradient(155deg,#b9d2e5,#efe0c7);color:#193047;animation:intro-away .7s cubic-bezier(.7,0,.25,1) 2.1s forwards}
+.intro-mark{position:relative;width:116px;height:74px;overflow:hidden;animation:intro-mark-in .85s cubic-bezier(.2,.8,.2,1) both}
+.intro-sun{position:absolute;width:42px;height:42px;left:37px;top:15px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff2c9,#e9a66d 76%);transform:translateY(38px) scale(.65);animation:intro-sunrise 1s cubic-bezier(.18,.8,.3,1) .2s forwards}
+.intro-horizon{position:absolute;left:4px;right:4px;bottom:13px;height:28px;border-top:2px solid rgba(25,48,71,.72);border-radius:50% 50% 0 0;transform:scaleX(.1);transform-origin:center;animation:intro-horizon-in .65s ease .45s forwards}
+.intro-ray{position:absolute;top:4px;width:2px;height:9px;border-radius:2px;background:#cb7444;opacity:0;animation:intro-ray-in .35s ease 1s forwards}.ray-one{left:57px}.ray-two{left:28px;top:14px;transform:rotate(-48deg)}.ray-three{right:28px;top:14px;transform:rotate(48deg)}
+.intro-wordmark{font:800 14px Manrope,sans-serif;letter-spacing:.2em;opacity:0;transform:translateY(8px);animation:intro-text-in .55s ease .75s forwards}.intro-tagline{font:500 8px 'DM Mono',monospace;letter-spacing:.28em;opacity:0;animation:intro-text-in .5s ease 1s forwards}
+@keyframes intro-away{to{opacity:0;visibility:hidden;pointer-events:none}}@keyframes intro-mark-in{from{opacity:0;transform:translateY(12px) scale(.88)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes intro-sunrise{to{transform:translateY(0) scale(1)}}@keyframes intro-horizon-in{to{transform:scaleX(1)}}@keyframes intro-ray-in{to{opacity:.8}}@keyframes intro-text-in{to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.intro-screen{animation:intro-away .01ms linear .01ms forwards}.intro-mark,.intro-sun,.intro-horizon,.intro-ray,.intro-wordmark,.intro-tagline{animation:none;opacity:1;transform:none}}
+/* Seven-day outlook */
+.weekly-section{max-width:1180px;margin:0 auto;padding:48px clamp(22px,5vw,64px) 58px;position:relative}
+.weekly-section:before{content:"";position:absolute;top:0;left:clamp(22px,5vw,64px);right:clamp(22px,5vw,64px);height:1px;background:var(--line)}
+.weekly-list{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.week-day{min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 7px;border-right:1px solid var(--line);text-align:center}.week-day:last-child{border-right:0}
+.week-date{display:flex;flex-direction:column;gap:3px}.week-date strong{font:600 12px Manrope,sans-serif}.week-date span,.week-condition,.week-rain{font:9px 'DM Mono',monospace;color:var(--muted)}.week-icon{font-size:23px;line-height:1.2}.week-condition{min-height:2.4em;display:grid;place-items:center;font-family:'DM Sans',sans-serif;font-size:10px}.week-rain{white-space:nowrap}.week-temps{display:flex;gap:9px;font:600 12px Manrope,sans-serif}.week-temps span{color:var(--muted);font-weight:500}
+@media(max-width:720px){.weekly-list{grid-template-columns:repeat(4,minmax(0,1fr))}.week-day:nth-child(4){border-right:0}.week-day:nth-child(-n+4){border-bottom:1px solid var(--line)}}
+@media(max-width:420px){.weekly-list{grid-template-columns:repeat(2,minmax(0,1fr))}.week-day:nth-child(odd){border-right:1px solid var(--line)}.week-day:nth-child(even){border-right:0}.week-day:nth-child(-n+6){border-bottom:1px solid var(--line)}}
+/* Make the practical weather reminder easy to notice */
+.best-time{color:#34495a;font-size:15px;font-weight:600;line-height:1.5;max-width:470px}
+.scene-rain .best-time,.scene-storm .best-time,.scene-night .best-time{color:#f2f5f3}
+
+/* ===== Sunrise / sunset mode ===== */
+.mode-sunrise{--skyTop:#7f95c4;--skyBottom:#f7c08f;--accent:#e2733f}
+.mode-sunset{--skyTop:#6a5f9e;--skyBottom:#f29a6b;--accent:#e0663f}
+.scene-night.mode-sunrise{--skyTop:#252f58;--skyBottom:#b8745a}.scene-night.mode-sunset{--skyTop:#2a2650;--skyBottom:#b0605a}
+.scene-rain.mode-sunrise,.scene-rain.mode-sunset,.scene-storm.mode-sunrise,.scene-storm.mode-sunset{--skyBottom:#9a7a72}
+.mode-sunrise .sky-glow,.mode-sunset .sky-glow{left:58%;top:16%;background:radial-gradient(circle,rgba(255,170,100,.58),rgba(255,130,80,.2) 40%,transparent 68%);animation:glowPulse 6s ease-in-out infinite}
+@keyframes glowPulse{50%{opacity:.65;scale:1.1}}
+.mode-sunrise .horizon,.mode-sunset .horizon{background:linear-gradient(180deg,rgba(255,176,110,.6),rgba(255,140,90,.42))}
+.mode-sunrise .hero-art .celestial,.mode-sunset .hero-art .celestial{width:242px;height:242px;background:radial-gradient(circle at 40% 34%,#fff1c4 0 8%,#ffc27a 40%,#f58a52 76%,#dc6340 100%);box-shadow:0 0 60px 16px rgba(255,165,95,.62),0 0 150px 60px rgba(255,120,70,.34)}
+.mode-sunrise .hero-art .celestial:after,.mode-sunset .hero-art .celestial:after{display:none}
+.mode-sunrise .hero-art .celestial:before,.mode-sunset .hero-art .celestial:before{opacity:.9;background:repeating-conic-gradient(rgba(255,190,120,.42) 0 4deg,transparent 4deg 15deg)}
+.mode-sunrise .hero-art .celestial{animation:celestialReveal 1.2s cubic-bezier(.2,.75,.25,1) both,sunRise 8s cubic-bezier(.2,.65,.25,1) both,sunFloat 8s ease-in-out 8s infinite}
+.mode-sunset .hero-art .celestial{animation:celestialReveal 1.2s cubic-bezier(.2,.75,.25,1) both,sunSet 16s ease-in-out both}
+@keyframes sunRise{from{top:54%}to{top:8%}}@keyframes sunSet{from{top:8%}to{top:50%}}
+@media(max-width:560px){.mode-sunrise .hero-art .celestial,.mode-sunset .hero-art .celestial{width:165px;height:165px}}
+.bird{position:absolute;left:-30px;top:var(--y);width:18px;height:8px;z-index:3;display:none;opacity:.7;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 10'%3E%3Cpath d='M1 8Q6 0 12 7Q18 0 23 8' fill='none' stroke='%23332a3a' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat;animation:fly var(--d) linear var(--dl) infinite,flap .55s ease-in-out infinite alternate}
+.mode-sunrise .bird,.mode-sunset .bird{display:block}
+@keyframes fly{from{translate:0 0}to{translate:calc(100vw + 60px) -40px}}@keyframes flap{to{scale:1 .5}}
+.sun-mode{display:none;align-items:center;gap:10px;margin-top:14px;padding:8px 14px 8px 10px;border:1px solid var(--line);border-radius:999px;background:linear-gradient(90deg,rgba(255,186,110,.32),rgba(255,255,255,.12));font:500 10px 'DM Mono',monospace;letter-spacing:.08em;width:max-content;max-width:100%}
+.mode-sunrise .sun-mode,.mode-sunset .sun-mode{display:inline-flex;animation:rise .8s .5s both}
+.sun-mode-icon{position:relative;width:24px;height:16px;overflow:hidden;border-bottom:1.5px solid currentColor}
+.sun-mode-icon i{position:absolute;left:5px;bottom:-9px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#ffd89a,#f08a50);box-shadow:0 0 10px rgba(255,160,90,.8)}
+.mode-sunrise .sun-mode-icon i{animation:iconUp 3.2s ease-in-out infinite alternate}.mode-sunset .sun-mode-icon i{animation:iconDown 3.2s ease-in-out infinite alternate}
+@keyframes iconUp{from{translate:0 4px}to{translate:0 -10px}}@keyframes iconDown{from{translate:0 -10px}to{translate:0 6px}}
+@media(prefers-reduced-motion:reduce){.bird{display:none!important}}
+/* Final phone overrides follow the desktop animation rules so they stay effective on narrow screens. */
+@media(max-width:600px){
+  .hero{display:block;min-height:0;padding:36px 20px 72px}
+  .hero-copy{width:100%;max-width:100%}
+  .topbar{height:auto;min-height:76px;padding:14px 18px;gap:12px;align-items:flex-start}
+  .topbar-right{gap:9px;flex-direction:column;align-items:flex-end}
+  .live-label{font-size:7px;letter-spacing:.08em;max-width:48vw;text-align:right}
+  .city-heading{display:block;max-width:none;margin-bottom:22px}
+  .location-controls{width:100%;max-width:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;margin-top:14px}
+  .location-button{justify-content:center;min-height:40px}
+  .location-search{width:100%;min-width:0;height:40px}
+  .location-search input{width:100%;font-size:12px}
+  .current-weather{gap:12px}
+  .temperature{font-size:clamp(68px,21vw,92px)}
+  .condition-block{padding-left:12px;min-width:0}
+  .hero-art{width:150px;height:160px;right:8px;top:270px;opacity:.36;pointer-events:none}
+  .hero-art .celestial{width:84px;height:84px;left:52%;top:10%}
+  .scene-night .hero-art .celestial{width:74px;height:74px;left:52%;top:13%}
+  .scene-night .hero-art .celestial:after{width:70px;height:70px;left:24px;top:-9px}
+  .hero-art .hero-cloud-front{transform:scale(.42);left:14%;top:45%}
+  .hero-art .hero-cloud-back{transform:scale(.3);left:0;top:53%}
+  .hero-caption{left:20px;right:20px;bottom:20px;font-size:7px;gap:7px}
+  .section-heading{gap:12px;align-items:flex-start}
+  .section-heading h2{font-size:20px}
+  .section-aside{font-size:10px;max-width:36%;text-align:right;line-height:1.45}
+  .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .detail-card{min-height:122px;padding:16px 13px}
+  .detail-card:nth-child(2n){border-right:0}
+  .detail-card:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .hour-card{flex-basis:94px;min-height:145px;padding:14px 7px 9px}
+  .week-day{padding:12px 9px;min-height:126px}
+  .week-condition{font-size:9px}
+  .footer{padding:18px 20px;gap:14px;flex-wrap:wrap}
+  .footer p{font-size:9px;line-height:1.5;order:3;width:100%;margin:0}
+}
+@media(max-width:380px){
+  .hero{padding-inline:16px}
+  .location-controls{grid-template-columns:1fr}
+  .location-button{justify-self:start}
+  .hero-art{top:305px;right:0}
+  .section-aside{max-width:34%;font-size:9px}
+  .week-day{padding-inline:6px}
+  .details-section,.hourly-section,.weekly-section{padding-inline:16px}
+}
+</style>
+</head>
+<body class="scene-loading">
+<div class="intro-screen" id="introScreen" aria-hidden="true">
+  <div class="intro-mark"><span class="intro-sun"></span><span class="intro-horizon"></span><i class="intro-ray ray-one"></i><i class="intro-ray ray-two"></i><i class="intro-ray ray-three"></i></div>
+  <div class="intro-wordmark">ATMOSPHERE</div>
+  <div class="intro-tagline">FEEL THE DAY</div>
+</div>
+  <div class="sky" aria-hidden="true">
+    <div class="sky-glow"></div>
+        <div class="cloud cloud-one"><i></i><i></i><i></i></div>
+    <div class="cloud cloud-two"><i></i><i></i><i></i></div>
+    <div class="cloud cloud-three"><i></i><i></i><i></i></div>
+    <div class="rain-layer" id="rainLayer"></div>
+    <div class="snow-layer" id="snowLayer"></div>
+    <div class="fog-layer"></div>
+    <div class="lightning"></div>
+    <div class="horizon"></div>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Atmosphere home">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span>ATMOSPHERE<small>FEEL THE DAY</small></span>
+    </a>
+    <div class="topbar-right">
+      <span class="live-label"><span class="live-dot"></span><span id="updatedLabel">LIVE CONDITIONS</span></span>
+      <div class="header-controls"><button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" aria-label="Turn ambient sounds on"><span class="sound-icon" aria-hidden="true">♫</span><span class="sound-label">SOUND OFF</span></button><button class="unit-toggle" id="unitToggle" type="button" aria-label="Switch temperature units"><span class="active">°C</span><span>°F</span></button></div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="cityName">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> A LITTLE FEELING FOR TODAY</div>
+        <h1 class="advice" id="advice">Finding the feeling of your day…</h1>
+        <p class="best-time" id="bestTime"></p>
+
+          <div class="city-heading">
+          <div>
+            <p class="location-kicker" id="locationKicker">WEATHER FOR</p>
+            <h2 id="cityName">Loading…</h2>
+            <p class="local-time" id="localTime"></p>
+          </div>
+          <div class="location-controls">
+  <button id="useLocation" class="location-button" type="button" aria-label="Show weather for my exact location">◎ <span>My location</span></button>
+  <form id="locationSearchForm" class="location-search" role="search">
+    <label class="sr-only" for="locationSearch">Search for a location</label>
+    <input id="locationSearch" type="search" placeholder="Search a place…" autocomplete="off" aria-label="Search for another location">
+    <button type="submit" aria-label="Search locations">⌕</button>
+    <div id="locationResults" class="location-results" role="listbox" aria-label="Location search results" hidden></div>
+  </form>
+</div>
+        </div>
+
+        <div class="current-weather">
+          <div class="temperature" id="temperature">—<span>°</span></div>
+          <div class="condition-block">
+            <button class="condition-name explainable" id="conditionButton" type="button" data-tip="The main sky condition for this moment." aria-label="Current condition. Click for an explanation">—</button>
+            <p class="feels-like" id="feelsLike"></p>
+          </div>
+        </div>
+        <div class="today-range" id="todayRange"></div>
+        <div class="sun-path" id="sunPath"></div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="celestial" id="celestial"></div>
+        <div class="hero-cloud hero-cloud-back"><span></span><span></span><span></span></div>
+        <div class="hero-cloud hero-cloud-front"><span></span><span></span><span></span></div>
+        <div class="weather-streak streak-one"></div><div class="weather-streak streak-two"></div>
+        <div class="hero-glints"><i></i><i></i><i></i><i></i><i></i></div>
+        <svg class="bolt" viewBox="0 0 60 120"><path d="M38 0 14 62h18L20 120 52 48H33z" fill="#fff6c8"/></svg>
+      </div>
+      <div class="hero-caption"><span class="caption-dot"></span><span id="sceneCaption">A sky in motion</span><span class="caption-rule"></span><span>LOOK UP, THEN OUT</span></div>
+    </section>
+
+    <section class="details-section" aria-label="A few useful details">
+      <div class="section-heading"><div><p class="section-kicker">THE LITTLE THINGS THAT HELP</p><h2>A few things to know</h2></div><p class="section-aside">Tap a symbol if you want the short version.</p></div>
+      <div class="detail-grid" id="detailGrid"></div>
+    </section>
+
+    <section class="hourly-section" aria-label="Hourly forecast">
+      <div class="section-heading hourly-heading"><div><p class="section-kicker">THE DAY, AS IT UNFOLDS</p><h2>Hours in the sky</h2></div><div class="scroll-hint"><span>SCROLL TO WANDER</span><span aria-hidden="true">→</span></div></div>
+      <div class="hourly-shell"><div class="hourly-rail" id="hourlyRail" tabindex="0" aria-label="Scrollable hourly forecast"></div></div>
+      <p class="hourly-note" id="hourlyNote">Conditions can shift. Here’s the shape of the day.</p>
+    </section>
+
+
+    <section class="weekly-section" aria-label="Seven-day weather forecast">
+      <div class="section-heading"><div><p class="section-kicker">AHEAD IN THE WEEK</p><h2>Seven days, at a glance</h2></div><p class="section-aside">A little look at what’s coming.</p></div>
+      <div class="weekly-list" id="weeklyForecast" aria-live="polite"></div>
+    </section>
+    <footer class="footer"><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>ATMOSPHERE<small>FEEL THE DAY</small></span></a><p>Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a> · Air quality by <a href="https://confluence.ecmwf.int/display/CKB/CAMS%3A+Global+Atmospheric+Composition+Forecasts" target="_blank" rel="noreferrer">CAMS ENSEMBLE</a></p><a class="back-top" href="#top">BACK TO THE SKY ↑</a></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+const cities = [
+  { name: 'Mumbai', country: 'India', lat: 19.076, lon: 72.8777, tz: 'Asia/Kolkata' },
+  { name: 'London', country: 'United Kingdom', lat: 51.5072, lon: -0.1276, tz: 'Europe/London' },
+  { name: 'Tokyo', country: 'Japan', lat: 35.6762, lon: 139.6503, tz: 'Asia/Tokyo' },
+  { name: 'New York', country: 'United States', lat: 40.7128, lon: -74.006, tz: 'America/New_York' }
+];
+
+const $ = (id) => document.getElementById(id);
+const state = { city: 0, unit: 'C', weather: null, air: null, toastTimer: null, timer: null, request: 0, lastMessage: '', lastWeatherFetch: 0, refreshingRequest: null, fetchController: null, networkOnline: navigator.onLine, weatherSource: 'Open-Meteo' };
+const weatherDescriptions = {
+  0: ['Clear sky', 'A clear sky means little to no cloud cover overhead.'],
+  1: ['Mostly clear', 'Mostly clear skies have just a few clouds drifting by.'],
+  2: ['Partly cloudy', 'Sun and clouds are sharing the sky.'],
+  3: ['Overcast', 'Clouds cover most or all of the sky.'],
+  45: ['Foggy', 'Tiny water droplets in the air are making it hazy.'],
+  48: ['Icy fog', 'Fog is forming with a light deposit of ice crystals.'],
+  51: ['Light drizzle', 'Very fine rain is falling from low clouds.'],
+  53: ['Drizzle', 'A steady sprinkle of light rain is in the air.'],
+  55: ['Heavy drizzle', 'A thicker, persistent drizzle is falling.'],
+  56: ['Freezing drizzle', 'Light drizzle may freeze when it touches cold surfaces.'],
+  57: ['Freezing drizzle', 'A heavier icy drizzle may make surfaces slippery.'],
+  61: ['Light rain', 'Light rain is falling; a small umbrella may be useful.'],
+  63: ['Rain', 'Steady rain is falling across the area.'],
+  65: ['Heavy rain', 'Heavy rain is expected; take shelter and bring rain protection.'],
+  66: ['Freezing rain', 'Rain may freeze on contact and make roads or paths slippery.'],
+  67: ['Heavy freezing rain', 'Freezing rain may create hazardous, icy surfaces.'],
+  71: ['Light snow', 'Light snowflakes are falling.'],
+  73: ['Snow', 'Snow is falling steadily.'],
+  75: ['Heavy snow', 'Heavy snowfall may reduce visibility and slow travel.'],
+  77: ['Snow grains', 'Small ice grains are falling from the sky.'],
+  80: ['Passing showers', 'Brief showers may pass through; keep an eye on the sky.'],
+  81: ['Rain showers', 'Showers are likely to come and go.'],
+  82: ['Heavy showers', 'Intense showers may arrive suddenly.'],
+  85: ['Snow showers', 'Snow showers may come and go.'],
+  86: ['Heavy snow showers', 'Heavy bursts of snow may briefly affect visibility.'],
+  95: ['Thunderstorm', 'Thunder and lightning are possible. It may be best to stay sheltered.'],
+  96: ['Thunderstorm & hail', 'Thunderstorm with possible small hail. Stay sheltered.'],
+  99: ['Thunderstorm & hail', 'Thunderstorm with larger hail possible. Stay sheltered.']
+};
+
+function weatherInfo(code) {
+  const key = Number(code);
+  if (weatherDescriptions[key]) return weatherDescriptions[key];
+  if (key >= 95) return weatherDescriptions[95];
+  return weatherDescriptions[3];
+}
+function sceneFor(code, isDay) {
+  if (!isDay) return 'night';
+  if ([95, 96, 99].includes(Number(code))) return 'storm';
+  if ([45, 48].includes(Number(code))) return 'fog';
+  if ([71, 73, 75, 77, 85, 86].includes(Number(code))) return 'snow';
+  if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(Number(code))) return 'rain';
+  if ([2, 3].includes(Number(code))) return 'cloudy';
+  return 'clear';
+}
+function weatherGlyph(code, isDay = true) {
+  code = Number(code);
+  if (!isDay && (code === 0 || code === 1)) return '☾';
+  if (code === 0) return '☀';
+  if (code === 1 || code === 2) return isDay ? '◐' : '☾';
+  if (code === 3) return '☁';
+  if (code === 45 || code === 48) return '≋';
+  if (code >= 71 && code <= 86) return '❄';
+  if ([95, 96, 99].includes(code)) return 'ϟ';
+  if (code >= 51 && code <= 67) return '☂';
+  if (code >= 80 && code <= 82) return '☂';
+  return '☁';
+}
+function convertWeatherGovForecast(hourlyData, dailyData, city) {
+  const hourlyPeriods = hourlyData.properties?.periods || [];
+  const dailyPeriods = dailyData.properties?.periods || [];
+  if (!hourlyPeriods.length || !dailyPeriods.length) throw new Error('Backup forecast has no periods');
+  const weatherCodeFor = text => {
+    const value = String(text || '').toLowerCase();
+    if (/thunder|storm/.test(value)) return 95;
+    if (/blizzard|snow|sleet|ice|freezing/.test(value)) return 71;
+    if (/fog|haze|smoke/.test(value)) return 45;
+    if (/rain|shower|drizzle/.test(value)) return 61;
+    if (/overcast/.test(value)) return 3;
+    if (/mostly cloudy|partly cloudy|cloudy/.test(value)) return 2;
+    if (/mostly sunny|partly sunny|few clouds/.test(value)) return 1;
+    if (/sunny|clear/.test(value)) return 0;
+    return 3;
+  };
+  const celsius = value => value?.unitCode?.endsWith(':degF') ? (Number(value.value) - 32) * 5 / 9 : Number(value?.value);
+  const toIsoLocal = value => {
+    const date = new Date(value);
+    const parts = new Intl.DateTimeFormat('en-CA', { timeZone: city.tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(date);
+    const part = type => parts.find(item => item.type === type)?.value || '00';
+    return `${part('year')}-${part('month')}-${part('day')}T${part('hour')}:${part('minute')}`;
+  };
+  const currentIndex = Math.max(0, hourlyPeriods.findIndex(period => new Date(period.startTime) >= new Date(Date.now() - 60 * 60_000)));
+  const periods = hourlyPeriods.slice(Math.max(0, currentIndex), Math.max(0, currentIndex) + 168);
+  const currentPeriod = periods[0] || hourlyPeriods[0];
+  const temperatures = periods.map(period => celsius(period.temperature));
+  const currentTemp = celsius(currentPeriod.temperature);
+  const currentHumidity = Number(currentPeriod.relativeHumidity?.value);
+  const currentWind = Number(String(currentPeriod.windSpeed || '').match(/[\d.]+/)?.[0]);
+  const currentGust = Number(String(currentPeriod.windGust || '').match(/[\d.]+/)?.[0]);
+  const time = periods.map(period => toIsoLocal(period.startTime));
+  const dailyMap = new Map();
+  dailyPeriods.forEach(period => {
+    const key = toIsoLocal(period.startTime).slice(0, 10);
+    const row = dailyMap.get(key) || {};
+    row[period.isDaytime ? 'day' : 'night'] = period;
+    dailyMap.set(key, row);
+  });
+  const daily = [...dailyMap.entries()].slice(0, 7).map(([date, row]) => {
+    const day = row.day || row.night || {};
+    const night = row.night || row.day || {};
+    const maxTemp = Math.max(...[row.day, row.night].filter(Boolean).map(period => celsius(period.temperature)).filter(Number.isFinite));
+    const minTemp = Math.min(...[row.day, row.night].filter(Boolean).map(period => celsius(period.temperature)).filter(Number.isFinite));
+    return { date, day, maxTemp, minTemp };
+  });
+  return {
+    current: { time: toIsoLocal(currentPeriod.startTime), temperature_2m: currentTemp, relative_humidity_2m: Number.isFinite(currentHumidity) ? currentHumidity : 50, apparent_temperature: currentTemp, is_day: currentPeriod.isDaytime ? 1 : 0, precipitation: Number(currentPeriod.probabilityOfPrecipitation?.value || 0) / 100, rain: 0, showers: 0, snowfall: 0, weather_code: weatherCodeFor(currentPeriod.shortForecast), cloud_cover: /cloud/.test(String(currentPeriod.shortForecast).toLowerCase()) ? 70 : 20, wind_speed_10m: Number.isFinite(currentWind) ? currentWind * 1.60934 : 0, wind_direction_10m: 0, wind_gusts_10m: Number.isFinite(currentGust) ? currentGust * 1.60934 : 0 },
+    hourly: { time, temperature_2m: temperatures, apparent_temperature: temperatures, precipitation_probability: periods.map(period => Number(period.probabilityOfPrecipitation?.value || 0)), precipitation: periods.map(period => Number(period.probabilityOfPrecipitation?.value || 0) > 0 ? .1 : 0), weather_code: periods.map(period => weatherCodeFor(period.shortForecast)), is_day: periods.map(period => period.isDaytime ? 1 : 0), uv_index: periods.map(() => 0), visibility: periods.map(period => Number(period.visibility?.value || 16093)), wind_speed_10m: periods.map(period => Number(String(period.windSpeed || '').match(/[\d.]+/)?.[0] || 0) * 1.60934), wind_gusts_10m: periods.map(period => Number(String(period.windGust || '').match(/[\d.]+/)?.[0] || 0) * 1.60934) },
+    daily: { time: daily.map(item => item.date), weather_code: daily.map(item => weatherCodeFor((item.day || {}).shortForecast)), temperature_2m_max: daily.map(item => Number.isFinite(item.maxTemp) ? item.maxTemp : null), temperature_2m_min: daily.map(item => Number.isFinite(item.minTemp) ? item.minTemp : null), sunrise: daily.map(item => `${item.date}T06:00`), sunset: daily.map(item => `${item.date}T18:00`), uv_index_max: daily.map(() => 0), precipitation_probability_max: daily.map(item => Number((item.day || item.night || {}).probabilityOfPrecipitation?.value || 0)) }
+  };
+}
+function convertWttrForecast(data, city) {
+  const current = data.current_condition?.[0];
+  const days = data.weather || [];
+  if (!current || !days.length) throw new Error('Backup weather service returned incomplete data');
+  const weatherCodeFor = value => {
+    const text = String(value || '').toLowerCase();
+    if (/thunder|storm/.test(text)) return 95;
+    if (/snow|sleet|ice|blizzard/.test(text)) return 71;
+    if (/fog|mist|haze/.test(text)) return 45;
+    if (/rain|drizzle|shower/.test(text)) return 61;
+    if (/overcast/.test(text)) return 3;
+    if (/cloud/.test(text)) return 2;
+    if (/sunny|clear/.test(text)) return 0;
+    return 3;
+  };
+  const hourly = [];
+  days.forEach(day => (day.hourly || []).forEach(period => {
+    const time = String(period.time || '0').padStart(4, '0');
+    const iso = `${day.date}T${time.slice(0,2)}:${time.slice(2,4)}`;
+    const timestamp = new Date(`${iso}:00`).getTime();
+    hourly.push({ iso, timestamp, period });
+  }));
+  if (!hourly.length) days.forEach(day => (day.hourly || []).forEach(period => {
+    const time = String(period.time || '0').padStart(4, '0');
+    hourly.push({ iso: `${day.date}T${time.slice(0,2)}:${time.slice(2,4)}`, timestamp: Date.parse(`${day.date}T${time.slice(0,2)}:${time.slice(2,4)}:00`), period });
+  }));
+  hourly.sort((a,b) => a.timestamp - b.timestamp);
+  const getC = value => Number(value);
+  const temps = hourly.map(item => getC(item.period.tempC));
+  const dailyWeather = days.slice(0,7);
+  const asDaily = dailyWeather.map(day => day.hourly || []);
+  const sunTime = (date, value) => {
+    const match = String(value || '').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (!match) return `${date}T06:00`;
+    let hour = Number(match[1]) % 12;
+    if (match[3].toUpperCase() === 'PM') hour += 12;
+    return `${date}T${String(hour).padStart(2,'0')}:${match[2]}`;
+  };
+  const currentTemp = Number(current.temp_C);
+  const currentCode = weatherCodeFor(current.weatherDesc?.[0]?.value);
+  const localHour = Number(new Intl.DateTimeFormat('en-GB', { timeZone: city.tz, hour: '2-digit', hourCycle: 'h23' }).format(new Date()));
+  const sunriseMatch = String(days[0]?.astronomy?.[0]?.sunrise || '06:00 AM').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  const sunsetMatch = String(days[0]?.astronomy?.[0]?.sunset || '06:00 PM').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  const hourOf = match => match ? (Number(match[1]) % 12) + (match[3].toUpperCase() === 'PM' ? 12 : 0) : NaN;
+  const isDay = localHour >= hourOf(sunriseMatch) && localHour < hourOf(sunsetMatch);
+  const localTime = new Intl.DateTimeFormat('en-CA', { timeZone: city.tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date());
+  return {
+    current: { time: localTime.replace(', ', 'T'), temperature_2m: currentTemp, relative_humidity_2m: Number(current.humidity || 50), apparent_temperature: Number(current.FeelsLikeC ?? current.temp_C), is_day: isDay ? 1 : 0, precipitation: Number(current.precipMM || 0), rain: Number(current.precipMM || 0), showers: 0, snowfall: 0, weather_code: currentCode, cloud_cover: Number(current.cloudcover || 0), wind_speed_10m: Number(current.windspeedKmph || 0), wind_direction_10m: Number(current.winddirDegree || 0), wind_gusts_10m: Number(current.windspeedKmph || 0) },
+    hourly: { time: hourly.map(item => item.iso), temperature_2m: temps, apparent_temperature: hourly.map(item => Number(item.period.FeelsLikeC ?? item.period.tempC)), precipitation_probability: hourly.map(item => Number(item.period.chanceofrain || item.period.chanceofsnow || 0)), precipitation: hourly.map(item => Number(item.period.precipMM || 0)), weather_code: hourly.map(item => weatherCodeFor(item.period.weatherDesc?.[0]?.value)), is_day: hourly.map(item => Number(String(item.period.time || '0').padStart(4,'0').slice(0,2)) >= 6 && Number(String(item.period.time || '0').padStart(4,'0').slice(0,2)) < 19 ? 1 : 0), uv_index: hourly.map(item => Number(item.period.uvIndex || 0)), visibility: hourly.map(item => Number(item.period.visibility || 10) * 1000), wind_speed_10m: hourly.map(item => Number(item.period.windspeedKmph || 0)), wind_gusts_10m: hourly.map(item => Number(item.period.windspeedKmph || 0)) },
+    daily: { time: dailyWeather.map(day => day.date), weather_code: dailyWeather.map(day => weatherCodeFor(day.hourly?.[4]?.weatherDesc?.[0]?.value || current.weatherDesc?.[0]?.value)), temperature_2m_max: dailyWeather.map(day => Number(day.maxtempC)), temperature_2m_min: dailyWeather.map(day => Number(day.mintempC)), sunrise: dailyWeather.map(day => sunTime(day.date, day.astronomy?.[0]?.sunrise)), sunset: dailyWeather.map(day => sunTime(day.date, day.astronomy?.[0]?.sunset)), uv_index_max: dailyWeather.map(day => Number(day.uvIndex || 0)), precipitation_probability_max: dailyWeather.map(day => Math.max(0, ...asDaily[dailyWeather.indexOf(day)].map(hour => Number(hour.chanceofrain || 0)))) }
+  };
+}
+function tempC(c) { return state.unit === 'C' ? Math.round(c) : Math.round(c * 9 / 5 + 32); }
+function tempLabel(c) { return `${tempC(c)}°`; }
+function dateParts(iso, timezone, opts) {
+  const bare = typeof iso === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d(:\d\d)?$/.test(iso);
+  return new Intl.DateTimeFormat('en', { ...opts, timeZone: bare ? 'UTC' : timezone }).format(new Date(bare ? iso + 'Z' : iso));
+}
+function toHourDate(iso, timezone) {
+  return new Date(new Intl.DateTimeFormat('en-CA', { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).format(new Date(iso)).replace(/(\d{4})-(\d{2})-(\d{2}),?\s*(\d{2})/, '$1-$2-$3T$4:00:00'));
+}
+function adviceFor(current, hourly, nowIndex, daily) {
+  const code = Number(hourly.weather_code?.[nowIndex] ?? current.weather_code);
+  const temp = Number(hourly.apparent_temperature?.[nowIndex] ?? current.apparent_temperature ?? hourly.temperature_2m?.[nowIndex] ?? current.temperature_2m);
+  const isDay = Number(hourly.is_day?.[nowIndex] ?? current.is_day) === 1;
+  const localHour = Number((hourly.time?.[nowIndex] || current.time || '').slice(11, 13));
+  const next = hourly.precipitation_probability?.slice(nowIndex, nowIndex + 6) || [];
+  const maxRain = Math.max(0, ...next.map(Number).filter(Number.isFinite));
+  const uv = Number(hourly.uv_index?.[nowIndex] ?? daily.uv_index_max?.[0]);
+  const wind = Number(current.wind_speed_10m || 0);
+  const rainyCodes = [51,53,55,56,57,61,63,65,66,67,80,81,82];
+  const snowyCodes = [71,73,75,77,85,86];
+  let condition;
+  if ([95,96,99].includes(code)) condition = 'Thunderstorms';
+  else if (snowyCodes.includes(code)) condition = 'Snowy';
+  else if ([45,48].includes(code)) condition = 'Foggy';
+  else if (rainyCodes.includes(code) || maxRain >= 60) condition = code >= 80 ? 'Showers' : 'Rainy';
+  else if (code === 3) condition = 'Cloudy';
+  else if (code === 2) condition = 'Partly cloudy';
+  else if (code === 1) condition = isDay ? 'Mostly sunny' : 'Mostly clear';
+  else condition = isDay ? 'Sunny' : 'Clear';
+
+  let feeling;
+  if (temp >= 32) feeling = 'hot';
+  else if (temp >= 25) feeling = 'warm';
+  else if (temp <= 7) feeling = 'cold';
+  else if (temp <= 15) feeling = 'cool';
+  else feeling = 'mild';
+  let headline = `${condition} and ${feeling}${isDay ? '' : ' tonight'}`;
+  const clearSky = code === 0 || code === 1;
+  if (isDay && localHour >= 5 && localHour < 11) headline = `${condition} morning, feels ${feeling}`;
+  else if (isDay && localHour >= 11 && localHour < 15) headline = clearSky && feeling === 'hot' ? 'Sunny and hot' : `${condition} at midday, feels ${feeling}`;
+  else if (isDay && localHour >= 15 && localHour < 18) headline = `${condition} afternoon, feels ${feeling}`;
+  else if (isDay && localHour >= 18) headline = `${condition} evening, feels ${feeling}`;
+  const sets = [];
+  if ([95,96,99].includes(code)) sets.push(['Thunderstorms are around. Best to stay indoors.', 'Stormy weather ahead. Wait for it to pass before heading out.', 'Thunderstorms today. Take care and stay somewhere sheltered.']);
+  else if (snowyCodes.includes(code)) sets.push(['Snow is falling. Wear warm shoes and a cosy layer.', 'A snowy day—wrap up warm before heading out.', 'Snowy weather today. Take care on slippery paths.']);
+  else if ([45,48].includes(code)) sets.push(['Foggy outside. Take extra care on the road.', 'Low visibility today—give yourself extra time to travel.', 'It’s foggy. Keep an eye out as you head out.']);
+  else if (rainyCodes.includes(code) || maxRain >= 60) sets.push(['Rain is expected. Grab your umbrella.', 'A rainy day—take an umbrella with you.', 'Showers may arrive. Bring a rain jacket or umbrella.']);
+  else if (condition === 'Cloudy') sets.push(['Cloudy skies today. A light layer may feel nice.', 'It’s cloudy out. A comfortable day to take it easy.', 'Clouds overhead today—keep a light layer handy.']);
+  else if (isDay && (condition === 'Partly cloudy' || condition === 'Mostly sunny' || condition === 'Sunny')) sets.push(['Don’t forget your sunglasses.', 'A bright day—bring your sunglasses.', 'Sunshine is out. Sunglasses may come in handy.']);
+  else sets.push(['A mild day outside. Enjoy a little fresh air.', 'Comfortable weather today—nice for a short walk.', 'A pleasant day to get out for a bit.']);
+  if (condition !== 'Thunderstorms' && condition !== 'Snowy' && condition !== 'Foggy' && !(rainyCodes.includes(code) || maxRain >= 60)) {
+    if (feeling === 'hot') sets.push(['Hot weather today. Bring water and look for shade.', 'It’s hot outside—carry water if you’re heading out.', 'A hot day. Sunscreen and water are good to have.']);
+    else if (feeling === 'cold') sets.push(['Cold outside. Bring a warm coat.', 'Bundle up before you head out.', 'A warm layer will help in this cold weather.']);
+    else if (feeling === 'cool') sets.push(['A little cool today. Bring a light jacket.', 'Cool weather—take a layer with you.', 'You may want a jacket when you head out.']);
+    else if (wind >= 32) sets.push(['It’s windy. A light jacket may help.', 'Breezy outside—keep a layer handy.', 'Wind is picking up. Hold on to your hat!']);
+    else if (Number.isFinite(uv) && uv >= 6 && isDay) sets.push(['Strong sunshine today. Remember sunscreen.', 'High UV today—cover up or find some shade.', 'The sun is strong. Sunglasses and sunscreen are a good idea.']);
+  }
+  if (!isDay && ![95,96,99].includes(code) && !snowyCodes.includes(code) && !rainyCodes.includes(code)) sets.unshift(['Clear skies tonight. Bring a light layer if you’ll be out.', 'A calm night ahead. A light jacket may feel good.', 'Mostly quiet skies tonight—enjoy the evening.']);
+  const pool = [...sets.flat(), ...extraMessages({ condition, feeling, isDay, wind, uv, rainy: rainyCodes.includes(code) || maxRain >= 60 })];
+  const message = pool.length ? pool[((Number.isFinite(localHour) ? localHour : 0) % pool.length + pool.length) % pool.length] : 'Check the sky before heading out.';
+  const peakSun = ['Peak sunlight now. Sunglasses and sunscreen can help.', 'The midday sun is strong. Remember your sunglasses.', 'Brightest part of the day—shade and sunscreen are a good idea.'];
+  const timedMessage = isDay && localHour >= 11 && localHour < 15 && (code === 0 || code === 1) ? peakSun[localHour % peakSun.length] : message;
+
+  const times = hourly.time || [];
+  let bestIndex = -1, bestScore = -Infinity;
+  for (let i = Math.max(0, nowIndex); i < Math.min(times.length, nowIndex + 15); i++) {
+    const light = hourly.is_day?.[i] === 1;
+    const rain = Number(hourly.precipitation_probability?.[i] || 0);
+    const gust = Number(hourly.wind_gusts_10m?.[i] || 0);
+    const t = Number(hourly.apparent_temperature?.[i] ?? hourly.temperature_2m?.[i] ?? 20);
+    if (!light) continue;
+    const score = (t >= 12 && t <= 28 ? 38 : 10 - Math.abs(t - 20)) - rain * .48 - Math.max(0, gust - 25) * .4;
+    if (score > bestScore) { bestScore = score; bestIndex = i; }
+  }
+  let best = 'No clear window in the next few hours';
+  if (bestIndex >= 0 && bestScore > 0) {
+    const from = dateParts(times[bestIndex], cities[state.city].tz, { hour: 'numeric' });
+    const to = times[bestIndex + 1] ? dateParts(times[bestIndex + 1], cities[state.city].tz, { hour: 'numeric' }) : '';
+    best = to ? `${from}–${to} looks like the nicest window` : `${from} looks like the nicest window`;
+  }
+  return { message: headline, best, reminder: timedMessage };
+}
+function iconSvg(kind) {
+  const common = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+  const paths = {
+    humidity: '<path d="M12 3c-2.8 3.7-6 7-6 11a6 6 0 0 0 12 0c0-4-3.2-7.3-6-11Z"/><path d="M9 15a3 3 0 0 0 3 3"/>',
+    feels: '<path d="M14 14.76V5a2 2 0 0 0-4 0v9.76a4 4 0 1 0 4 0Z"/><path d="M12 11v7"/>',
+    rain: '<path d="M7 17.5A4.5 4.5 0 1 1 8.5 8.75 5.5 5.5 0 1 1 18 16"/><path d="m9 19-1 2m6-2-1 2m6-2-1 2"/>',
+    wind: '<path d="M3 8h12a3 3 0 1 0-3-3M2 12h17a3 3 0 1 1-3 3M4 16h7"/>',
+    uv: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>',
+    aqi: '<path d="M4 19V5m0 14h16"/><path d="m7 15 3-4 3 2 5-7"/><circle cx="18" cy="6" r="1"/>',
+    visibility: '<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.5"/>'
+  };
+  return `<svg ${common}>${paths[kind]}</svg>`;
+}
+function airCategory(aqi) {
+  if (!Number.isFinite(Number(aqi))) return ['Unavailable', 'Air quality is not currently available for this location.'];
+  const n = Number(aqi);
+  if (n <= 20) return ['Good', 'The air is clean. It’s a comfortable time to be outdoors.'];
+  if (n <= 40) return ['Fair', 'Air quality is generally okay for outdoor plans.'];
+  if (n <= 60) return ['Moderate', 'Some people may prefer a shorter or gentler time outdoors.'];
+  if (n <= 80) return ['Poor', 'Consider limiting strenuous activity outside, especially if you’re sensitive to air pollution.'];
+  if (n <= 100) return ['Very poor', 'Sensitive groups may want to reduce time outdoors.'];
+  return ['Extremely poor', 'Air pollution is high. Consider spending less time outdoors.'];
+}
+function detailCards(current, hourly, air, idx) {
+  const precipitation = Math.max(0, ...((hourly.precipitation_probability || []).slice(idx, idx + 4).map(Number).filter(Number.isFinite)));
+  const visibility = hourly.visibility?.[idx];
+  const visKm = Number.isFinite(visibility) ? visibility / 1000 : NaN;
+  const isUsAqi = Number.isFinite(Number(air?.current?.us_aqi ?? air?.hourly?.us_aqi?.[0]));
+  const aqi = air?.current?.us_aqi ?? air?.hourly?.us_aqi?.[0] ?? air?.current?.european_aqi ?? air?.hourly?.european_aqi?.[0];
+  const category = airCategory(aqi);
+  const uv = Number(hourly.uv_index?.[idx]);
+  const hasUv = Number.isFinite(uv);
+  const uvAdvice = !hasUv ? 'Not available right now' : uv >= 11 ? 'Extreme · avoid midday sun' : uv >= 8 ? 'Very high · cover up' : uv >= 6 ? 'High · protect your skin' : uv >= 3 ? 'Moderate · take care' : 'Low · little protection needed';
+  const humidity = Number(current.relative_humidity_2m);
+  const humidityNote = Number.isFinite(humidity) ? (humidity >= 70 ? 'Moist air · may feel muggy' : humidity <= 30 ? 'Dry air' : 'A comfortable amount of moisture') : 'Not available here';
+  const cards = [
+    { key: 'humidity', label: 'Humidity', value: Number.isFinite(humidity) ? `${humidity}<small>%</small>` : '—', note: humidityNote, tip: 'Relative humidity compares the moisture in the air with the maximum it could hold at this temperature. High humidity can make warm weather feel muggy.' },
+    { key: 'feels', label: 'Feels like', value: `${tempLabel(current.apparent_temperature)}<small>°</small>`, note: 'What your body may feel', tip: 'Feels-like temperature blends air temperature with wind and humidity. It can feel different from the number on the thermometer.' },
+    { key: 'rain', label: 'Rain chance', value: Number.isFinite(precipitation) ? `${Math.round(precipitation)}<small>%</small>` : '—', note: 'Over the next few hours', tip: 'The chance that measurable rain or snow will fall at this location during the next few hours.' },
+    { key: 'wind', label: 'Wind', value: `${Math.round(current.wind_speed_10m || 0)}<small> km/h</small>`, note: 'A little breeze in the air', tip: 'Wind speed near the ground. Stronger winds can make it feel cooler and affect how comfortable it is outside.' },
+    { key: 'uv', label: 'UV index', value: hasUv ? `${Math.round(uv)}` : '—', note: uvAdvice, tip: 'The sun’s ultraviolet strength. Higher values mean unprotected skin can burn faster; shade, a hat and sunscreen help.' },
+    { key: 'aqi', label: 'Air quality', value: Number.isFinite(Number(aqi)) ? `${Math.round(Number(aqi))}<small> AQI</small>` : '—', note: `${category[0]}${Number.isFinite(Number(aqi)) ? ` · ${isUsAqi ? 'U.S.' : 'European'} scale` : ''}`, tip: `Air quality index: ${category[1]} This uses the ${isUsAqi ? 'U.S.' : 'European'} AQI scale from Open-Meteo and CAMS.` },
+    { key: 'visibility', label: 'Visibility', value: Number.isFinite(visKm) ? `${visKm >= 10 ? Math.round(visKm) : visKm.toFixed(1)}<small> km</small>` : '—', note: Number.isFinite(visKm) ? (visKm < 2 ? 'Hazy or hard to see far' : visKm < 6 ? 'Some haze in the distance' : 'A clear view ahead') : 'Not available here', tip: 'How far you can see through the air. Rain, fog, snow or haze can reduce visibility.' }
+  ];
+  return cards;
+}
+function renderDetails(current, hourly, air, idx) {
+  $('detailGrid').innerHTML = detailCards(current, hourly, air, idx).map(card => `
+    <button class="detail-card" type="button" data-tip="${escapeHtml(card.tip)}" aria-label="${escapeHtml(card.label)}: ${escapeHtml(card.value.replace(/<[^>]*>/g,''))}. Click for an explanation">
+      <span class="detail-top"><span class="detail-icon">${iconSvg(card.key)}</span><span class="info-mark" aria-hidden="true">i</span></span>
+      <span class="detail-label">${card.label}</span><span class="detail-value">${card.value}</span><span class="detail-note">${escapeHtml(card.note)}</span>
+    </button>`).join('');
+}
+function escapeHtml(value) { return String(value).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
+function renderWeekly(daily, timezone) {
+  const days = (daily.time || []).slice(0, 7);
+  const highs = daily.temperature_2m_max || [], lows = daily.temperature_2m_min || [];
+  const codes = daily.weather_code || [], rain = daily.precipitation_probability_max || [];
+  $('weeklyForecast').innerHTML = days.map((day, index) => {
+    const label = index === 0 ? 'Today' : dateParts(`${day}T12:00:00`, timezone, { weekday: 'short' });
+    const date = dateParts(`${day}T12:00:00`, timezone, { month: 'short', day: 'numeric' });
+    const high = Number.isFinite(Number(highs[index])) ? `${tempC(highs[index])}°` : '—';
+    const low = Number.isFinite(Number(lows[index])) ? `${tempC(lows[index])}°` : '—';
+    const rainLabel = Number.isFinite(Number(rain[index])) ? `${Math.round(Number(rain[index]))}%` : '—';
+    const description = weatherInfo(codes[index])[0];
+    return `<article class="week-day"><div class="week-date"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(date)}</span></div><span class="week-icon" aria-label="${escapeHtml(description)}">${weatherGlyph(codes[index], true)}</span><span class="week-condition">${escapeHtml(description)}</span><span class="week-rain" title="Maximum daily precipitation chance">☂ ${rainLabel}</span><div class="week-temps"><strong>${high}</strong><span>${low}</span></div></article>`;
+  }).join('');
+}
+function renderHourly(hourly, current) {
+  const now = new Date();
+  const zone = cities[state.city].tz;
+  const currentLocalKey = new Intl.DateTimeFormat('en-CA', { timeZone: zone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).format(now).replace(', ', ' ');
+  let start = hourly.time.findIndex(t => t.slice(0, 13).replace('T', ' ') >= currentLocalKey);
+  if (start < 0) start = 0;
+  const cards = [];
+  for (let j = start; j < Math.min(start + 24, hourly.time.length); j++) {
+    const iso = hourly.time[j], isCurrent = j === start;
+    const code = hourly.weather_code[j], isDay = hourly.is_day?.[j] === 1;
+    const time = isCurrent ? 'Now' : dateParts(iso, zone, { hour: 'numeric' });
+    const rain = hourly.precipitation_probability?.[j];
+    cards.push(`<article class="hour-card${isCurrent ? ' now' : ''}" aria-label="${escapeHtml(dateParts(iso, zone, { hour: 'numeric' }))}, ${escapeHtml(weatherInfo(code)[0])}, ${tempC(hourly.temperature_2m[j])} degrees, ${Math.round(rain || 0)} percent precipitation chance"><span class="hour-time">${time}</span><span class="hour-icon" aria-hidden="true">${weatherGlyph(code, isDay)}</span><span class="hour-temp">${tempC(hourly.temperature_2m[j])}°</span><span class="hour-rain">${Number.isFinite(Number(rain)) && rain > 0 ? `· ${Math.round(rain)}% rain` : '· dry skies'}</span></article>`);
+  }
+  $('hourlyRail').innerHTML = cards.join('');
+  $('hourlyNote').textContent = 'Rain chance and temperature help you spot a comfortable window in the day.';
+}
+function setScene(current) {
+  const scene = sceneFor(current.weather_code, current.is_day);
+  document.body.className = `scene-${scene}`;
+  const captions = { clear: 'Sunlight, with room to breathe', cloudy: 'A softer kind of daylight', rain: 'A little weather in the air', storm: 'The sky has something to say', fog: 'The world, a little quieter', snow: 'A softer world, falling slowly', night: 'The day has let go' };
+  $('sceneCaption').textContent = captions[scene];
+  const celestial = $('celestial');
+  celestial.setAttribute('role', 'img');
+  celestial.setAttribute('aria-label', current.is_day ? 'Sun in the weather scene' : 'Moon in the weather scene');
+  const name = weatherInfo(current.weather_code);
+  $('conditionButton').textContent = name[0];
+  $('conditionButton').dataset.tip = name[1];
+  $('conditionButton').setAttribute('aria-label', `${name[0]}. Click for an explanation`);
+}
+function render(data, air) {
+  state.weather = data; state.air = air;
+  const current = data.current, hourly = data.hourly, daily = data.daily;
+  const city = cities[state.city];
+  const localNow = new Intl.DateTimeFormat('en', { timeZone: city.tz, weekday: 'long', hour: 'numeric', minute: '2-digit', hour12: true }).format(new Date());
+  const localNowKey = new Intl.DateTimeFormat('en-CA', { timeZone: city.tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).format(new Date()).replace(', ', ' ');
+  let idx = hourly.time.findIndex(t => t.slice(0, 13).replace('T', ' ') >= localNowKey);
+  if (idx < 0) idx = 0;
+  const advice = adviceFor(current, hourly, idx, daily);
+  document.getElementById("cityName").textContent = city.displayName || city.name;
+  $('localTime').textContent = localNow + (city.country ? ' · ' + city.country : '');
+  $('temperature').innerHTML = `${tempC(current.temperature_2m)}<span>°</span>`;
+  $('feelsLike').textContent = `Feels like ${tempC(current.apparent_temperature)}°`;
+  $('advice').textContent = advice.message;
+  $('bestTime').textContent = advice.reminder;
+  $('todayRange').textContent = `TODAY  ·  HIGH ${tempC(daily.temperature_2m_max[0])}°  /  LOW ${tempC(daily.temperature_2m_min[0])}°`;
+  const sunrise = dateParts(daily.sunrise[0], city.tz, { hour: 'numeric', minute: '2-digit' });
+  const sunset = dateParts(daily.sunset[0], city.tz, { hour: 'numeric', minute: '2-digit' });
+  $('sunPath').innerHTML = `${iconSvg('uv')}<span>Sunrise ${sunrise}</span><span class="sun-divider"></span><span>Sunset ${sunset}</span>`;
+  const dateUpdated = data.current.time;
+  $('updatedLabel').textContent = `${state.weatherSource === 'Open-Meteo' ? 'LIVE' : state.weatherSource.toUpperCase() + ' BACKUP'} · UPDATED ${dateParts(dateUpdated, city.tz, { hour: 'numeric', minute: '2-digit' })}`;
+  renderDetails(current, hourly, air, idx);
+  renderHourly(hourly, current);
+  renderWeekly(daily, city.tz);
+  setScene(current);
+  ambience.weatherCode = Number(current.weather_code);
+  ambience.isDay = Number(current.is_day) === 1;
+  if (ambience.enabled) startAmbienceForScene();
+  document.body.classList.remove('scene-loading');
+}
+async function loadCity(index, { refresh = false } = {}) {
+  if (refresh && state.refreshingRequest !== null) return;
+  const requestId = ++state.request;
+  // Cancel an older city lookup when the user changes location mid-request.
+  state.fetchController?.abort();
+  const controller = new AbortController();
+  state.fetchController = controller;
+  if (refresh) state.refreshingRequest = requestId;
+  else state.refreshingRequest = null;
+  state.city = index;
+  if (!refresh) { state.weather = null; state.air = null; }
+  const city = cities[index];
+  document.getElementById("cityName").textContent = city.displayName || city.name;
+  if (!refresh) {
+  $('advice').textContent = 'Finding the feeling of your day…';
+  $('detailGrid').innerHTML = '';
+  $('hourlyRail').innerHTML = '';
+  }
+  if (!refresh) document.body.classList.add('scene-loading');
+  const forecastUrl = new URL('https://api.open-meteo.com/v1/forecast');
+  forecastUrl.search = new URLSearchParams({
+    latitude: city.lat, longitude: city.lon, timezone: city.tz,
+    current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m',
+    hourly: 'temperature_2m,apparent_temperature,precipitation_probability,precipitation,weather_code,is_day,uv_index,visibility,wind_speed_10m,wind_gusts_10m',
+    daily: 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_max',
+    forecast_days: '7', wind_speed_unit: 'kmh'
+  }).toString();
+  const airUrl = new URL('https://air-quality-api.open-meteo.com/v1/air-quality');
+  airUrl.search = new URLSearchParams({ latitude: city.lat, longitude: city.lon, timezone: city.tz, current: 'us_aqi,european_aqi,pm2_5,pm10', hourly: 'us_aqi,european_aqi' }).toString();
+  try {
+    // Fail promptly on captive portals or a stalled connection, and retry transient failures once.
+    const requestJson = async url => {
+      let lastError;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        const attemptController = new AbortController();
+        const abortAttempt = () => attemptController.abort();
+        controller.signal.addEventListener('abort', abortAttempt, { once: true });
+        const timeout = setTimeout(abortAttempt, 12000);
+        try {
+          const response = await fetch(url, { signal: attemptController.signal, cache: 'no-store' });
+          if (!response.ok) throw new Error(`Weather service returned ${response.status}`);
+          return await response.json();
+        } catch (error) {
+          lastError = error;
+          if (controller.signal.aborted) throw error;
+          if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 700));
+        } finally { clearTimeout(timeout); }
+      }
+      throw lastError;
+    };
+    const loadBackupForecast = async () => {
+      const inUnitedStates = city.lat >= 18 && city.lat <= 72 && city.lon >= -180 && city.lon <= -60;
+      if (inUnitedStates && (!city.country || /united states|usa|u\.s\.?/i.test(city.country))) {
+      try {
+      const url = new URL('https://api.weather.gov/points/' + city.lat + ',' + city.lon);
+      const signal = AbortSignal.timeout ? AbortSignal.timeout(12000) : undefined;
+      const pointResponse = await fetch(url, { signal, headers: { Accept: 'application/geo+json' } });
+      if (!pointResponse.ok) throw new Error(`Backup weather service returned ${pointResponse.status}`);
+      const point = await pointResponse.json();
+      const forecastUrl = point.properties?.forecastHourly;
+      const dailyUrl = point.properties?.forecast;
+      if (!forecastUrl || !dailyUrl) throw new Error('Backup service did not provide a forecast for this location');
+      const [hourlyResponse, dailyResponse] = await Promise.all([
+        fetch(forecastUrl, { signal, headers: { Accept: 'application/geo+json' } }),
+        fetch(dailyUrl, { signal, headers: { Accept: 'application/geo+json' } })
+      ]);
+      if (!hourlyResponse.ok || !dailyResponse.ok) throw new Error('Backup forecast is temporarily unavailable');
+      const [hourlyData, dailyData] = await Promise.all([hourlyResponse.json(), dailyResponse.json()]);
+      state.weatherSource = 'Weather.gov';
+      return convertWeatherGovForecast(hourlyData, dailyData, city);
+      } catch (error) { console.warn('Weather.gov fallback unavailable; trying global backup.', error); }
+      }
+      const url = new URL(`https://wttr.in/${city.lat},${city.lon}`);
+      url.search = new URLSearchParams({ format: 'j1' }).toString();
+      const response = await fetch(url, { signal: AbortSignal.timeout ? AbortSignal.timeout(12000) : undefined, headers: { Accept: 'application/json' } });
+      if (!response.ok) throw new Error(`Backup weather service returned ${response.status}`);
+      state.weatherSource = 'wttr.in';
+      return convertWttrForecast(await response.json(), city);
+    };
+    const airPromise = requestJson(airUrl).catch(error => { console.warn('Air quality is temporarily unavailable', error); return null; });
+    let forecast, air = null;
+    try {
+      forecast = await requestJson(forecastUrl);
+      state.weatherSource = 'Open-Meteo';
+    } catch (primaryError) {
+      if (controller.signal.aborted) throw primaryError;
+      console.warn('Primary weather API unavailable; trying backup provider.', primaryError);
+      forecast = await loadBackupForecast();
+    }
+    if (requestId !== state.request) return;
+    render(forecast, air);
+    state.lastWeatherFetch = Date.now();
+    state.networkOnline = true;
+    document.body.classList.remove('scene-loading');
+    // Render the useful forecast first; update the optional air-quality card if that API responds.
+    airPromise.then(lateAir => {
+      if (!lateAir || requestId !== state.request || state.weather !== forecast) return;
+      state.air = lateAir;
+      const nowKey = new Intl.DateTimeFormat('en-CA', { timeZone: cities[state.city].tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).format(new Date()).replace(', ', ' ');
+      let detailIndex = forecast.hourly.time.findIndex(time => time.slice(0, 13).replace('T', ' ') >= nowKey);
+      if (detailIndex < 0) detailIndex = 0;
+      renderDetails(forecast.current, forecast.hourly, lateAir, detailIndex);
+    });
+  } catch (error) {
+    if (requestId !== state.request) return;
+    if (error.name === 'AbortError' && state.fetchController !== controller) return;
+    state.networkOnline = navigator.onLine;
+    document.body.classList.remove('scene-loading');
+    if (refresh && state.weather) {
+      $("updatedLabel" ).textContent = navigator.onLine ? 'CONNECTION ISSUE · SHOWING LAST UPDATE' : 'OFFLINE · SHOWING LAST UPDATE';
+      showToast(navigator.onLine ? 'Weather service could not be reached. Showing the last update.' : 'You are offline. Showing the last update.');
+      console.warn(error);
+      return;
+    }
+    $('advice').textContent = 'The sky is taking a moment to come into focus.';
+    $('bestTime').textContent = navigator.onLine ? 'The weather service could not be reached. Try again in a moment.' : 'You appear to be offline. Reconnect and weather will reload automatically.';
+    document.getElementById("cityName").textContent = city.displayName || city.name;
+    $('localTime').textContent = city.country;
+    $('temperature').innerHTML = '—<span>°</span>';
+    $('feelsLike').textContent = '';
+    $('todayRange').textContent = '';
+    $('sunPath').textContent = '';
+    $('updatedLabel').textContent = navigator.onLine ? 'WEATHER SERVICE UNAVAILABLE' : 'NO INTERNET CONNECTION';
+    $('detailGrid').innerHTML = `<p class="error-message">${navigator.onLine ? 'Could not reach the weather service. Check your connection and retry.' : 'No internet connection. Reconnect to load live weather.'}</p><button class="detail-card" type="button" onclick="loadCity(state.city)"><span class="detail-label">TRY AGAIN</span><span class="detail-value">↻</span></button>`;
+    $('hourlyRail').innerHTML = '';
+    showToast(navigator.onLine ? 'The weather service could not be reached. Tap Try Again to retry.' : 'No internet connection. Weather will retry when you reconnect.');
+    console.error(error);
+  } finally {
+    if (state.refreshingRequest === requestId) state.refreshingRequest = null;
+    if (state.fetchController === controller) state.fetchController = null;
+  }
+}
+function showToast(message) {
+  const toast = $('toast'); toast.textContent = message; toast.classList.add('show');
+  clearTimeout(state.toastTimer); state.toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+}
+function refreshLocalTime() {
+  if (!state.weather) return;
+  const city = cities[state.city];
+  $('localTime').textContent = new Intl.DateTimeFormat('en', { timeZone: city.tz, weekday: 'long', hour: 'numeric', minute: '2-digit', hour12: true }).format(new Date()) + (city.country ? ' · ' + city.country : '');
+}
+
+
+// Weather-matched ambient sound. Synthesized locally; starts only after the sound button is pressed.
+const ambience = { context: null, master: null, nodes: [], timers: [], enabled: false, scene: '', soundName: '', isDay: true, weatherCode: 0 };
+function audioContext() {
+  if (!ambience.context) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) { showToast('This browser does not support ambient sound.'); return null; }
+    ambience.context = new Ctx();
+    ambience.master = ambience.context.createGain();
+    ambience.master.gain.value = 0;
+    ambience.master.connect(ambience.context.destination);
+  }
+  return ambience.context;
+}
+function clearAmbienceTimers() { ambience.timers.forEach(clearTimeout); ambience.timers = []; }
+function stopAmbience() {
+  clearAmbienceTimers();
+  const ctx = ambience.context;
+  if (!ctx || !ambience.master) return;
+  const now = ctx.currentTime;
+  ambience.master.gain.cancelScheduledValues(now);
+  ambience.master.gain.setTargetAtTime(0, now, .28);
+  const nodes = ambience.nodes.splice(0);
+  setTimeout(() => nodes.forEach(n => { try { n.stop?.(); n.disconnect?.(); } catch {} }), 1300);
+}
+function makeNoise(ctx, { type = 'lowpass', frequency = 1000, q = .5, volume = .1 } = {}) {
+  const buffer = ctx.createBuffer(1, ctx.sampleRate * 3, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  const src = ctx.createBufferSource(); src.buffer = buffer; src.loop = true;
+  const filter = ctx.createBiquadFilter(); filter.type = type; filter.frequency.value = frequency; filter.Q.value = q;
+  const gain = ctx.createGain(); gain.gain.value = volume;
+  src.connect(filter); filter.connect(gain); gain.connect(ambience.master); src.start();
+  ambience.nodes.push(src, filter, gain);
+  return { src, filter, gain };
+}
+function chirp(ctx, { night = false, delay = 0 } = {}) {
+  const start = ctx.currentTime + delay;
+  const osc = ctx.createOscillator(), amp = ctx.createGain(), pan = ctx.createStereoPanner();
+  const base = night ? 850 + Math.random() * 350 : 1650 + Math.random() * 850;
+  osc.type = night ? 'sine' : 'triangle';
+  osc.frequency.setValueAtTime(base, start);
+  osc.frequency.exponentialRampToValueAtTime(base * (night ? 1.35 : .63), start + (night ? .42 : .19));
+  amp.gain.setValueAtTime(.0001, start);
+  amp.gain.linearRampToValueAtTime(night ? .09 : .12, start + .035);
+  amp.gain.exponentialRampToValueAtTime(.0001, start + (night ? .48 : .24));
+  pan.pan.value = Math.random() * 1.5 - .75;
+  osc.connect(amp); amp.connect(pan); pan.connect(ambience.master);
+  osc.start(start); osc.stop(start + (night ? .5 : .26));
+  ambience.nodes.push(osc, amp, pan);
+}
+function birdsong(ctx, night = false) {
+  if (!ambience.enabled) return;
+  if (night) {
+    // A low, hollow owl-like two-note call among soft crickets.
+    const call = (offset, hz) => {
+      const t = ctx.currentTime + offset, osc = ctx.createOscillator(), amp = ctx.createGain(), filter = ctx.createBiquadFilter();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(hz, t); osc.frequency.exponentialRampToValueAtTime(hz * .84, t + .42);
+      filter.type = 'lowpass'; filter.frequency.value = 1050;
+      amp.gain.setValueAtTime(.0001, t); amp.gain.linearRampToValueAtTime(.075, t + .12); amp.gain.exponentialRampToValueAtTime(.0001, t + .62);
+      osc.connect(filter); filter.connect(amp); amp.connect(ambience.master); osc.start(t); osc.stop(t + .65); ambience.nodes.push(osc, filter, amp);
+    };
+    call(.05, 510 + Math.random() * 70); call(.68, 430 + Math.random() * 65);
+  } else {
+    const count = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < count; i++) chirp(ctx, { delay: i * (.16 + Math.random() * .12) });
+  }
+}
+function startCrickets(ctx, scene) {
+  const chirpPair = () => {
+    if (!ambience.enabled || ambience.scene !== scene) return;
+    const now = ctx.currentTime;
+    for (let i = 0; i < 5; i++) {
+      const start = now + i * .19;
+      const osc = ctx.createOscillator(), amp = ctx.createGain(), pan = ctx.createStereoPanner();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(4100 + Math.random() * 450, start);
+      osc.frequency.exponentialRampToValueAtTime(3500 + Math.random() * 300, start + .055);
+      amp.gain.setValueAtTime(.0001, start);
+      amp.gain.linearRampToValueAtTime(.09, start + .012);
+      amp.gain.setValueAtTime(.09, start + .032);
+      amp.gain.exponentialRampToValueAtTime(.0001, start + .075);
+      pan.pan.value = Math.random() * 1.6 - .8;
+      osc.connect(amp); amp.connect(pan); pan.connect(ambience.master);
+      osc.start(start); osc.stop(start + .09);
+      ambience.nodes.push(osc, amp, pan);
+    }
+    const next = setTimeout(chirpPair, 1150 + Math.random() * 420);
+    ambience.timers.push(next);
+  };
+  chirpPair();
+}
+function thunderclap(ctx) {
+  if (!ambience.enabled) return;
+  const start = ctx.currentTime + .2;
+  const flash = makeNoise(ctx, { type: 'highpass', frequency: 900, q: .7, volume: .001 });
+  flash.gain.gain.setValueAtTime(.001, start); flash.gain.gain.linearRampToValueAtTime(.11, start + .035); flash.gain.gain.exponentialRampToValueAtTime(.001, start + .62); flash.src.stop(start + .7);
+  const rumble = makeNoise(ctx, { type: 'lowpass', frequency: 125, q: .8, volume: .001 });
+  rumble.gain.gain.setValueAtTime(.001, start + .08); rumble.gain.gain.linearRampToValueAtTime(.24, start + .55); rumble.gain.gain.exponentialRampToValueAtTime(.001, start + 5.2); rumble.src.stop(start + 5.4);
+}
+function setSoundLabel(label) {
+  ambience.soundName = label;
+  const button = document.getElementById('soundToggle');
+  if (button) button.querySelector('.sound-label').textContent = ambience.enabled ? label.toUpperCase() : 'SOUND OFF';
+}
+function startAmbienceForScene() {
+  stopAmbience(); if (!ambience.enabled || !ambience.context) return;
+  const ctx = ambience.context;
+  if (ctx.state === 'suspended') ctx.resume().catch(error => console.warn('Audio resume was blocked', error));
+  const scene = document.body.className.match(/scene-(rain|storm|clear|cloudy|fog|snow|night)/)?.[1] || 'clear';
+  ambience.scene = scene;
+  const localHour = Number(new Intl.DateTimeFormat('en-GB', { timeZone: cities[state.city].tz, hour: '2-digit', hourCycle: 'h23' }).format(new Date()));
+  const isNight = ambience.isDay === false || !Number.isFinite(localHour) || localHour < 6 || localHour >= 19;
+  const code = Number(ambience.weatherCode || 0);
+  const rainyNight = isNight && ([45,48,51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code));
+  const stormNight = isNight && [95,96,99].includes(code);
+  const now = ctx.currentTime;
+  ambience.master.gain.cancelScheduledValues(now);
+  ambience.master.gain.setTargetAtTime(.9, now, .22);
+  if (stormNight || rainyNight || scene === 'rain' || scene === 'storm') {
+    const storm = stormNight || (!isNight && scene === 'storm');
+    makeNoise(ctx, { type: 'lowpass', frequency: 1100, q: .35, volume: .17 });
+    makeNoise(ctx, { type: 'highpass', frequency: 2600, q: .25, volume: .055 });
+    if (isNight) makeNoise(ctx, { type: 'lowpass', frequency: 310, q: .4, volume: .025 });
+    setSoundLabel(isNight ? (storm ? 'Night storm + crickets' : 'Night rain + crickets') : (storm ? 'Rain + thunder' : 'Soft rain'));
+    if (isNight) startCrickets(ctx, scene);
+    if (storm) {
+      const thunder = () => { if (ambience.enabled && ambience.scene === scene) thunderclap(ctx); };
+      const scheduleThunder = () => { thunder(); const timer = setTimeout(scheduleThunder, 8500 + Math.random() * 7500); ambience.timers.push(timer); };
+      const first = setTimeout(scheduleThunder, 2200); ambience.timers.push(first);
+    }
+    if (isNight) {
+      const nightCall = () => { if (ambience.enabled && ambience.scene === scene) birdsong(ctx, true); const timer = setTimeout(nightCall, 12500 + Math.random() * 9000); ambience.timers.push(timer); };
+      const first = setTimeout(nightCall, 3600); ambience.timers.push(first);
+    }
+  } else if (scene === 'clear' || scene === 'cloudy' || isNight) {
+    if (isNight) {
+      makeNoise(ctx, { type: 'lowpass', frequency: 500, q: .5, volume: .025 });
+      setSoundLabel('Night crickets');
+      startCrickets(ctx, scene);
+      const nightCall = () => { if (ambience.enabled && ambience.scene === scene) birdsong(ctx, true); const timer = setTimeout(nightCall, 10500 + Math.random() * 8500); ambience.timers.push(timer); };
+      birdsong(ctx, true); const first = setTimeout(nightCall, 9500); ambience.timers.push(first);
+    } else {
+      makeNoise(ctx, { type: 'highpass', frequency: 2400, q: .25, volume: .012 });
+      makeNoise(ctx, { type: 'lowpass', frequency: 500, q: .4, volume: .008 });
+      setSoundLabel(scene === 'cloudy' ? 'Breezy birds' : 'Birdsong');
+      const call = () => { if (!ambience.enabled || ambience.scene !== scene) return; birdsong(ctx); const timer = setTimeout(call, 2600 + Math.random() * 2100); ambience.timers.push(timer); };
+      birdsong(ctx); const first = setTimeout(call, 1700); ambience.timers.push(first);
+    }
+  } else if (scene === 'snow') {
+    makeNoise(ctx, { type: 'lowpass', frequency: 280, q: .35, volume: .018 });
+    setSoundLabel(isNight ? 'Night snowfall' : 'Quiet snowfall');
+    if (isNight) { startCrickets(ctx, scene); setTimeout(() => birdsong(ctx, true), 1300); }
+  } else if (scene === 'fog') {
+    makeNoise(ctx, { type: 'lowpass', frequency: 360, q: .5, volume: .026 });
+    setSoundLabel(isNight ? 'Night mist + crickets' : 'Misty hush');
+    if (isNight) startCrickets(ctx, scene);
+  }
+}
+$('soundToggle').addEventListener('click', async () => {
+  ambience.enabled = !ambience.enabled;
+  const button = $('soundToggle'); button.setAttribute('aria-pressed', String(ambience.enabled));
+  button.setAttribute('aria-label', ambience.enabled ? 'Turn ambient sounds off' : 'Turn ambient sounds on');
+  if (ambience.enabled) {
+    const ctx = audioContext();
+    if (!ctx) { ambience.enabled = false; button.setAttribute('aria-pressed', 'false'); button.querySelector('.sound-label').textContent = 'SOUND OFF'; return; }
+    try { await ctx.resume(); startAmbienceForScene(); showToast(`Ambient sound on · ${ambience.soundName.toLowerCase()}`); }
+    catch (error) { ambience.enabled = false; button.setAttribute('aria-pressed', 'false'); button.querySelector('.sound-label').textContent = 'SOUND OFF'; showToast('Your browser blocked audio. Tap sound again to allow playback.'); console.warn(error); }
+  } else { stopAmbience(); button.querySelector('.sound-label').textContent = 'SOUND OFF'; showToast('Ambient sound is off.'); }
+});
+
+/* ===== Location + search (rewritten) ===== */
+const tidy = t => (t || '').replace(/\s+(West|East|North|South)$/i, '').trim();
+const uniq = a => [...new Set(a.filter(Boolean))];
+function getPosition() {
+  const ask = opts => new Promise((ok, no) => navigator.geolocation.getCurrentPosition(ok, no, opts));
+  return ask({ enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 })
+    .catch(e => e.code === 1 ? Promise.reject(e) : ask({ enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }));
+}
+// Open-Meteo has no reverse-geocoding endpoint (the old call always failed -> "My location"),
+// so use OpenStreetMap for neighbourhood-level names, with BigDataCloud as backup.
+async function reverseGeocode(lat, lon) {
+  let area = '', city = '', region = '', country = '';
+  const reverseSignal = AbortSignal.timeout ? AbortSignal.timeout(9000) : undefined;
+  try {
+    const u = new URL('https://nominatim.openstreetmap.org/reverse');
+    u.search = new URLSearchParams({ format: 'jsonv2', lat, lon, zoom: 16, addressdetails: 1, 'accept-language': 'en' });
+    const r = await fetch(u, { signal: reverseSignal });
+    if (r.ok) {
+      const a = (await r.json()).address || {};
+      area = tidy(['suburb', 'neighbourhood', 'city_district', 'quarter', 'village', 'hamlet'].map(k => a[k]).find(Boolean));
+      city = a.city || a.town || a.municipality || a.state_district || a.county || '';
+      region = a.state || ''; country = a.country || '';
+    }
+  } catch {}
+  if (!area && !city) {
+    try {
+      const u = new URL('https://api.bigdatacloud.net/data/reverse-geocode-client');
+      u.search = new URLSearchParams({ latitude: lat, longitude: lon, localityLanguage: 'en' });
+      const r = await fetch(u, { signal: reverseSignal });
+      if (r.ok) { const d = await r.json(); area = tidy(d.locality); city = d.city || ''; region = d.principalSubdivision || ''; country = d.countryName || ''; }
+    } catch {}
+  }
+  city = city.replace(/\s+(Suburban|District)$/i, '').trim();
+  let parts = uniq([area, city]);
+  if (parts.length === 1 && region && region !== parts[0]) parts.push(region);
+  return { area, city, region, country, label: parts.join(', ') };
+}
+async function useMyLocation({ silent = false } = {}) {
+  const button = $('useLocation'), text = button.querySelector('span');
+  if (!navigator.geolocation) { showToast('Live location is not supported by this browser.'); return; }
+  button.disabled = true; text.textContent = 'Locating…';
+  try {
+    const { latitude: lat, longitude: lon } = (await getPosition()).coords;
+    text.textContent = 'Finding place…';
+    const place = await reverseGeocode(lat, lon);
+    const coords = `${Math.abs(lat).toFixed(2)}°${lat >= 0 ? 'N' : 'S'}, ${Math.abs(lon).toFixed(2)}°${lon >= 0 ? 'E' : 'W'}`;
+    const live = { name: place.area || place.city || 'Your location', displayName: place.label || coords, country: place.country, lat, lon, tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC', isLiveLocation: true };
+    let index = cities.findIndex(c => c.isLiveLocation);
+    if (index < 0) index = cities.push(live) - 1; else cities[index] = live;
+    $('locationKicker').textContent = 'YOUR LOCATION';
+    await loadCity(index);
+    if (!silent) showToast(place.label ? `Showing weather for ${place.label}` : 'Weather loaded, but the place name could not be looked up.');
+  } catch (error) {
+    if (!silent) showToast(error.code === 1 ? (isSecureContext ? 'Allow location access in your browser to use this feature.' : 'Location needs the page opened over https or localhost.') : error.code === 3 ? 'Finding your location timed out. Try again.' : 'Could not determine your location.');
+    console.warn(error);
+  } finally { button.disabled = false; text.textContent = 'My location'; }
+}
+$('useLocation').addEventListener('click', () => useMyLocation());
+// If permission was already granted, show the real location on load without prompting.
+navigator.permissions?.query({ name: 'geolocation' }).then(p => { if (p.state === 'granted') useMyLocation({ silent: true }); }).catch(() => {});
+
+const searchForm = $('locationSearchForm'), searchInput = $('locationSearch'), resultsBox = $('locationResults');
+let searchTimer = null, searchRequest = 0, currentResults = [];
+function closeLocationResults() { resultsBox.hidden = true; resultsBox.replaceChildren(); currentResults = []; }
+function showNote(msg) { const d = document.createElement('div'); d.className = 'location-note'; d.textContent = msg; resultsBox.replaceChildren(d); resultsBox.hidden = false; }
+async function resolveTz(lat, lon) {
+  try {
+    const u = new URL('https://api.open-meteo.com/v1/forecast');
+    u.search = new URLSearchParams({ latitude: lat, longitude: lon, timezone: 'auto', current: 'temperature_2m' });
+    const r = await fetch(u, { signal: AbortSignal.timeout ? AbortSignal.timeout(9000) : undefined }); if (r.ok) { const tz = (await r.json()).timezone; if (tz) return tz; }
+  } catch {}
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+}
+async function fetchPlaces(query) {
+  const parts = query.split(',').map(t => t.trim()).filter(Boolean), hint = parts.slice(1).join(' ').toLowerCase().split(/\s+/).filter(Boolean);
+  const u = new URL('https://geocoding-api.open-meteo.com/v1/search');
+  u.search = new URLSearchParams({ name: parts[0], count: hint.length ? '20' : '8', language: 'en', format: 'json' });
+  const signal = AbortSignal.timeout ? AbortSignal.timeout(10000) : undefined;
+  const r = await fetch(u, { signal }); if (!r.ok) throw new Error('Search failed');
+  let list = (await r.json()).results || [];
+  if (hint.length) { const f = list.filter(p => { const hay = [p.admin1, p.admin2, p.admin3, p.country, p.country_code].join(' ').toLowerCase(); return hint.every(w => hay.includes(w)); }); if (f.length) list = f; }
+  let items = list.slice(0, 8).map(p => ({ name: p.name, title: uniq([p.name, p.admin1]).join(', '), sub: uniq([p.admin2, p.admin1, p.country]).join(', '), country: p.country || '', lat: p.latitude, lon: p.longitude, tz: p.timezone }));
+  if (!items.length) { // broader fallback: neighbourhoods, landmarks, addresses
+    const n = new URL('https://nominatim.openstreetmap.org/search');
+    n.search = new URLSearchParams({ format: 'jsonv2', q: query, limit: '6', addressdetails: '1', 'accept-language': 'en' });
+    const nr = await fetch(n, { signal }); if (!nr.ok) throw new Error('Search failed');
+    items = (await nr.json()).map(p => { const bits = p.display_name.split(',').map(t => t.trim()); return { name: p.name || bits[0], title: bits.slice(0, 2).join(', '), sub: bits.slice(1, 4).join(', '), country: p.address?.country || '', lat: Number(p.lat), lon: Number(p.lon), tz: null }; });
+  }
+  return items;
+}
+async function chooseCity(item) {
+  closeLocationResults(); searchInput.value = '';
+  const tz = item.tz || await resolveTz(item.lat, item.lon);
+  const city = { name: item.name, displayName: item.title, country: item.country, lat: item.lat, lon: item.lon, tz };
+  let index = cities.findIndex(c => !c.isLiveLocation && Math.abs(c.lat - city.lat) < .02 && Math.abs(c.lon - city.lon) < .02);
+  if (index < 0) index = cities.push(city) - 1; else cities[index] = city;
+  $('locationKicker').textContent = 'WEATHER FOR';
+  loadCity(index);
+}
+async function searchLocations(query, { pickFirst = false } = {}) {
+  const requestId = ++searchRequest; query = query.trim();
+  if (query.length < 2) { closeLocationResults(); return; }
+  showNote('Searching…');
+  try {
+    const items = await fetchPlaces(query); if (requestId !== searchRequest) return;
+    if (!items.length) { showNote('No locations found. Try a city or area name.'); return; }
+    if (pickFirst) { chooseCity(items[0]); return; }
+    currentResults = items; resultsBox.replaceChildren();
+    items.forEach(item => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'location-result'; b.setAttribute('role', 'option');
+      const n = document.createElement('span'); n.className = 'loc-name'; n.textContent = item.name;
+      const t = document.createElement('span'); t.className = 'loc-sub'; t.textContent = item.sub;
+      b.append(n, t); b.addEventListener('click', () => chooseCity(item)); resultsBox.append(b);
+    });
+    resultsBox.hidden = false;
+  } catch (e) { if (requestId === searchRequest) showNote('Search unavailable. Check your connection and try again.'); console.warn(e); }
+}
+searchInput.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => searchLocations(searchInput.value), 300); });
+searchForm.addEventListener('submit', event => { event.preventDefault(); clearTimeout(searchTimer); searchLocations(searchInput.value, { pickFirst: true }); });
+searchForm.addEventListener('keydown', event => {
+  const opts = [...resultsBox.querySelectorAll('.location-result')], i = opts.indexOf(document.activeElement);
+  if (event.key === 'Escape') { closeLocationResults(); searchInput.focus(); }
+  else if (event.key === 'ArrowDown' && opts.length) { event.preventDefault(); opts[Math.min(i + 1, opts.length - 1)].focus(); }
+  else if (event.key === 'ArrowUp' && opts.length) { event.preventDefault(); (i <= 0 ? searchInput : opts[i - 1]).focus(); }
+});
+document.addEventListener('click', event => { if (!searchForm.contains(event.target)) closeLocationResults(); });
+unitToggle.addEventListener('click', () => {
+  state.unit = state.unit === 'C' ? 'F' : 'C';
+  document.querySelectorAll('#unitToggle span').forEach(span => span.classList.toggle('active', span.textContent.includes(state.unit)));
+  if (state.weather) render(state.weather, state.air);
+});
+document.addEventListener('click', event => {
+  const target = event.target.closest('[data-tip]');
+  if (target) showToast(target.dataset.tip);
+});
+document.addEventListener('keydown', event => {
+  if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('[data-tip]')) {
+    event.preventDefault(); showToast(event.target.dataset.tip);
+  }
+});
+
+/* ===== Motion layer: particles, staggered reveals, count-up, parallax ===== */
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const rnd = (a, b) => a + Math.random() * (b - a);
+function fill(el, n, vars) {
+  el.innerHTML = '';
+  for (let i = 0; i < n; i++) { const p = document.createElement('i'); Object.entries(vars()).forEach(([k, v]) => p.style.setProperty('--' + k, v)); el.append(p); }
+}
+fill($('rainLayer'), 80, () => ({ x: rnd(0, 112) + '%', h: rnd(40, 95) + 'px', d: rnd(.55, 1.05) + 's', dl: -rnd(0, 1.5) + 's', o: rnd(.25, .8) }));
+fill($('snowLayer'), 60, () => ({ x: rnd(0, 100) + '%', s: rnd(3, 8) + 'px', d: rnd(9, 18) + 's', sw: rnd(2.5, 5) + 's', dl: -rnd(0, 18) + 's', o: rnd(.5, .95), b: rnd(0, 1.6) + 'px' }));
+const starLayer = document.createElement('div'); starLayer.className = 'star-layer';
+document.querySelector('.sky').insertBefore(starLayer, document.querySelector('.horizon'));
+fill(starLayer, 80, () => ({ x: rnd(0, 100) + '%', y: rnd(0, 78) + '%', s: rnd(1, 3) + 'px', d: rnd(2, 5) + 's', dl: -rnd(0, 5) + 's' }));
+starLayer.insertAdjacentHTML('beforeend', '<b class="shoot"></b>');
+const heroDrops = document.createElement('div'); heroDrops.className = 'hero-drops';
+document.querySelector('.hero-art').append(heroDrops);
+fill(heroDrops, 16, () => ({ x: rnd(0, 100) + '%', d: rnd(.7, 1.2) + 's', dl: -rnd(0, 1.2) + 's' }));
+
+function reveal(nodes, step = 70, base = 0) {
+  nodes.filter(Boolean).forEach((n, i) => {
+    n.classList.remove('rv-wait', 'rv'); void n.offsetWidth;
+    n.style.animationDelay = (base + i * step) + 'ms'; n.classList.add('rv');
+  });
+}
+const revealObserver = new IntersectionObserver(entries => entries.forEach(e => {
+  if (!e.isIntersecting) return;
+  revealObserver.unobserve(e.target);
+  const sel = e.target.dataset.rv;
+  reveal(sel ? [...e.target.querySelectorAll(sel)] : [e.target], sel === '.hour-card' ? 40 : 70);
+}), { threshold: .12 });
+document.querySelectorAll('.section-heading').forEach(h => { if (!reduceMotion) { h.classList.add('rv-wait'); revealObserver.observe(h); } });
+
+function countUp(el, to, ms = 1100) {
+  const node = el.firstChild;
+  if (!node || node.nodeType !== 3 || !Number.isFinite(to)) return;
+  const from = to - 10, t0 = performance.now();
+  (function frame(t) {
+    const p = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - p, 3);
+    node.nodeValue = Math.round(from + (to - from) * e);
+    if (p < 1) requestAnimationFrame(frame);
+  })(t0);
+}
+/* ===== Message variations + sunrise/sunset mode ===== */
+const EXTRA = {
+  storm: ['Thunder is rumbling nearby. A good moment for tea indoors.', 'Lightning in the area. Stay put until it passes.', 'The sky’s putting on a show. Best watched from a window.', 'Not a day for open fields or tall trees. Stay sheltered.', 'Storm cells are passing through. Give it a little while.'],
+  snow: ['Fresh snow out there. Gloves, a hat and grippy shoes.', 'Flakes are drifting down. Perfect hot-chocolate weather.', 'Paths may be slick. Short steps and a steady pace.', 'Soft, quiet and white outside. Dress in layers.', 'Snowfall today. Leave extra time to get anywhere.'],
+  fog: ['Low cloud is hugging the ground. Use your lights if you’re driving.', 'A misty, hushed kind of day. Slow down and enjoy it.', 'Visibility is limited. Stay alert on roads and crossings.', 'The fog should lift in time. Until then, take it easy.', 'Hazy and soft outside. Something bright helps you be seen.'],
+  rain: ['The rain is steady. Waterproof shoes are a smart call.', 'A damp one outside. Pack the umbrella and some patience.', 'Puddles ahead. A little extra travel time goes a long way.', 'Showers on and off today. Keep a rain layer within reach.', 'A good day for a book and a window seat. If you’re out, stay dry.', 'Listen to the rain, and don’t forget your umbrella.'],
+  cloudy: ['Soft grey skies today, easy on the eyes.', 'Overcast but calm. A good day for a long walk.', 'Clouds are keeping things gentle. A light layer is plenty.', 'No glare today, which is great for errands and outdoor chores.', 'The sun is hiding behind the clouds, but it’s a fine day out.'],
+  partly: ['Sun and cloud taking turns. A lovely day to be out.', 'Patchy sunshine. Sunglasses in one pocket, a layer in the other.', 'Bright spells between the clouds. Make the most of them.', 'A mix of light and shade today. Easygoing weather.'],
+  sunny: ['Clear, bright and cheerful. Sunscreen is your friend.', 'Blue skies overhead. Go and get some fresh air.', 'A sun-soaked day. Shade breaks and water are worth it.', 'Glorious light today. Sunglasses on, plans out.', 'The sky is wide open. Make time to be outside.', 'Sunshine all around. A hat keeps it comfortable.'],
+  night: ['The sky has settled for the night. A calm evening ahead.', 'A quiet night outside. A light layer keeps you comfortable.', 'Stars may be out. Look up if you get the chance.', 'A peaceful night, perfect for winding down.', 'Dark and calm out there. Take care walking home.'],
+  hot: ['Heat is building. Stay hydrated and take shade breaks.', 'It’s a scorcher. Light clothes and lots of water.', 'Avoid the midday heat if you can.'],
+  warm: ['Warm and pleasant. Light, breathable clothes work best.', 'A warm one. Keep a bottle of water handy.', 'Comfortably warm. Evenings may feel nicer than afternoons.'],
+  cold: ['Properly cold. Layers, a scarf and a warm drink.', 'Chilly out there. Cover your hands and ears.', 'A crisp, cold day. Dress warmer than you think you need to.'],
+  cool: ['A cool freshness in the air. A light jacket will do.', 'Cool weather, perfect for a brisk walk.', 'A little chilly in the shade. Carry a layer.'],
+  mild: ['Gentle, easy temperatures today. Enjoy it.', 'Neither hot nor cold, which is exactly right for being outside.', 'Comfortable all round. A great day to get things done outdoors.'],
+  windy: ['Gusty out. Secure anything light and hold onto your hat.', 'A breezy day. Hair and umbrellas beware.'],
+  uv: ['UV is high. Sunscreen, a cap, and shade at midday.', 'Strong sun today. Reapply sunscreen if you’re out long.'],
+  sunrise: ['First light is spreading across the sky. A peaceful time to step out.', 'Sunrise is happening now. Look east if you can.', 'The day is just waking up. Soft light, quiet streets.', 'A golden start to the day. Make the most of the calm.'],
+  sunset: ['The sky is turning gold. A lovely moment to be outside.', 'Sunset is close. Find a view if you can.', 'Golden hour: the best light of the day is here.', 'The day is winding down in a glow. Bring a layer for the evening.']
+};
+function extraMessages(x) {
+  const out = [], c = x.condition;
+  if (c === 'Thunderstorms') return EXTRA.storm;
+  if (c === 'Snowy') return EXTRA.snow;
+  if (c === 'Foggy') return EXTRA.fog;
+  if (x.rainy) return EXTRA.rain;
+  if (c === 'Cloudy') out.push(...EXTRA.cloudy);
+  else if (!x.isDay) out.push(...EXTRA.night);
+  else if (c === 'Partly cloudy') out.push(...EXTRA.partly);
+  else out.push(...EXTRA.sunny);
+  out.push(...EXTRA[x.feeling]);
+  if (x.wind >= 32) out.push(...EXTRA.windy);
+  if (Number.isFinite(x.uv) && x.uv >= 6 && x.isDay) out.push(...EXTRA.uv);
+  const m = state.sunMode;
+  if (m) out.push(...EXTRA[m.kind], ...EXTRA[m.kind]);   // listed twice so they come up more often
+  return out;
+}
+const adviceBase = adviceFor;
+adviceFor = function (current, hourly, nowIndex, daily) {
+  const localHourKey = new Intl.DateTimeFormat('en-CA', { timeZone: cities[state.city].tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).format(new Date());
+  const key = `${state.city}|${current.time}|${state.sunMode?.kind || ''}|${localHourKey}`;
+  if (state._advKey === key && state._adv) return state._adv;   // keep the same note when only the unit changes
+  state._adv = adviceBase(current, hourly, nowIndex, daily); state._advKey = key; return state._adv;
+};
+function sunModeFor(data, city) {
+  const d = data.daily; if (!d?.sunrise?.[0] || !d?.sunset?.[0]) return null;
+  const toMin = iso => Number(iso.slice(11, 13)) * 60 + Number(iso.slice(14, 16));
+  const [h, mi] = new Intl.DateTimeFormat('en-GB', { timeZone: city.tz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date()).split(':').map(Number);
+  const now = h * 60 + mi, rise = now - toMin(d.sunrise[0]), set = now - toMin(d.sunset[0]);
+  const force = new URLSearchParams(location.search).get('sun');   // ?sun=sunrise or ?sun=sunset previews the mode
+  let kind = null, delta = 0;
+  if (force === 'sunrise' || force === 'sunset') { kind = force; delta = -12; }
+  else if (rise >= -40 && rise <= 50) { kind = 'sunrise'; delta = rise; }
+  else if (set >= -60 && set <= 40) { kind = 'sunset'; delta = set; }
+  if (!kind) return null;
+  const m = Math.abs(delta), word = kind === 'sunrise' ? ['Sunrise', 'Sun rose'] : ['Sunset', 'Sun set'];
+  const time = dateParts(kind === 'sunrise' ? d.sunrise[0] : d.sunset[0], city.tz, { hour: 'numeric', minute: '2-digit' });
+  const text = m <= 1 ? `${word[0]} right now · ${time}` : delta < 0 ? `${word[0]} in ${m} min · ${time}` : `${word[1]} ${m} min ago · ${time}`;
+  return { kind, delta, text };
+}
+const sunBadge = document.createElement('div'); sunBadge.className = 'sun-mode'; sunBadge.id = 'sunMode';
+sunBadge.innerHTML = '<span class="sun-mode-icon" aria-hidden="true"><i></i></span><span class="sun-mode-text" role="status"></span>';
+$('sunPath').after(sunBadge);
+for (let k = 0; k < 4; k++) {
+  const b = document.createElement('b'); b.className = 'bird';
+  b.style.setProperty('--y', rnd(50, 300) + 'px'); b.style.setProperty('--d', rnd(16, 28) + 's'); b.style.setProperty('--dl', -rnd(0, 20) + 's');
+  document.querySelector('.sky').insertBefore(b, document.querySelector('.horizon'));
+}
+function applySunMode() {
+  document.body.classList.remove('mode-sunrise', 'mode-sunset');
+  const m = state.sunMode; if (!m) return;
+  document.body.classList.add('mode-' + m.kind);
+  $('sceneCaption').textContent = m.kind === 'sunrise' ? 'First light, slowly arriving' : 'The day, glowing out';
+  sunBadge.querySelector('.sun-mode-text').textContent = m.text;
+}
+const sunBase = render;
+render = function (data, air) {
+  state.sunMode = sunModeFor(data, cities[state.city]);
+  sunBase(data, air);
+  applySunMode();
+};
+setInterval(() => {                                   // enter/leave the mode while the page stays open
+  if (!state.weather) return;
+  const hourKey = new Intl.DateTimeFormat('en-CA', { timeZone: cities[state.city].tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).format(new Date());
+  if (state._copyHourKey !== hourKey) { state._copyHourKey = hourKey; state._advKey = null; render(state.weather, state.air); return; }
+  const m = sunModeFor(state.weather, cities[state.city]);
+  if ((m?.kind || '') !== (state.sunMode?.kind || '')) render(state.weather, state.air);
+  else if (m) { state.sunMode = m; applySunMode(); }
+}, 60000);
+
+const baseRender = render;
+render = function (data, air) {
+  const firstLoad = !state.weather;           // false when only the unit toggle re-renders
+  baseRender(data, air);
+  if (reduceMotion || !firstLoad) return;
+  const sun = $('celestial'); sun.style.animation = 'none'; void sun.offsetWidth; sun.style.animation = '';
+  reveal(['.eyebrow', '.advice', '.best-time', '.city-heading', '.current-weather', '.today-range', '.sun-path'].map(s => document.querySelector(s)), 90, 100);
+  countUp($('temperature'), parseInt($('temperature').textContent, 10));
+  [['detailGrid', '.detail-card'], ['hourlyRail', '.hour-card']].forEach(([id, sel]) => {
+    $(id).querySelectorAll(sel).forEach(n => n.classList.add('rv-wait'));
+    const section = $(id).closest('section'); section.dataset.rv = sel;
+    revealObserver.unobserve(section); revealObserver.observe(section);
+  });
+};
+if (!reduceMotion) {
+  const sky = document.querySelector('.sky'); let ticking = false;
+  addEventListener('scroll', () => {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => { sky.style.translate = '0 ' + Math.min(scrollY * .35, 220) + 'px'; ticking = false; });
+  }, { passive: true });
+}
+
+loadCity(0);
+state.timer = setInterval(refreshLocalTime, 30_000);
+const WEATHER_REFRESH_INTERVAL = 15 * 60_000;
+setInterval(() => {
+  if (state.weather && document.visibilityState === 'visible') loadCity(state.city, { refresh: true });
+}, WEATHER_REFRESH_INTERVAL);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && state.weather && Date.now() - state.lastWeatherFetch >= WEATHER_REFRESH_INTERVAL) {
+    loadCity(state.city, { refresh: true });
+  }
+});
+window.addEventListener('online', () => {
+  state.networkOnline = true;
+  showToast('Connection restored. Updating the weather…');
+  loadCity(state.city, { refresh: Boolean(state.weather) });
+});
+window.addEventListener('offline', () => {
+  state.networkOnline = false;
+  if (state.weather) $('updatedLabel').textContent = 'OFFLINE · SHOWING LAST UPDATE';
+  showToast('You are offline. The latest weather will stay visible until you reconnect.');
+});
+
+</script>
+</body>
+</html>
+
+
+
+
